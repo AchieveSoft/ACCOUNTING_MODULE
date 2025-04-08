@@ -6,7 +6,10 @@ class ChartOfAccountService {
 
   static Future<List<ChartOfAccountResponseData>> getData() async {
     try {
-      final Map<String, dynamic> response = await _http.post('/api/chart-of-account/v1/get-data', {});
+      final Map<String, dynamic> response = await _http.post(
+        '/api/chart-of-account/v1/get-data',
+        {},
+      );
 
       if (response['success'] == true) {
         return (response['data'] as List<dynamic>)
@@ -18,5 +21,12 @@ class ChartOfAccountService {
     } catch (err) {
       rethrow;
     }
+  }
+
+  static Future<void> create(Map<String, dynamic> json) async {
+    await _http.post(
+      '/api/chart-of-account/v1/create',
+      json,
+    );
   }
 }

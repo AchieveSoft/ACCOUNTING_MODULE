@@ -1,13 +1,274 @@
 import 'package:accounting_module/blocs/chart_of_account/bloc.dart';
+import 'package:accounting_module/core/global_keys.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
+import 'package:accounting_module/services/chart_of_account.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+//[Nil] Popup เละเดี๋ยวมาแก้ ง่วงแล้ว
+// ignore: unused_element
+class _AddNewAccountPopup extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChartOfAccountBloc, ChartOfAccountState>(
+      builder:
+          (context, state) =>
+              state is ChartOfAccountDataState
+                  ? AlertDialog(
+                    title: Text(
+                      'เพิ่มบัญชีใหม่',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    content: SizedBox(
+                      width: 500,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: 'ผังบัญชีหลัก',
+                              ),
+                              items:
+                                  state.allItems
+                                      .where(
+                                        (item) =>
+                                            item.parentCode?.isEmpty == true,
+                                      )
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e.referenceCode,
+                                          child: Text(e.name),
+                                        ),
+                                      )
+                                      .toList(),
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['mainAccountCode'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: 'ผังบัญชีรอง',
+                              ),
+                              items:
+                                  state.allItems
+                                      .where(
+                                        (item) =>
+                                            item.parentCode ==
+                                            state
+                                                .createData?['mainAccountCode'],
+                                      )
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e.referenceCode,
+                                          child: Text(e.name),
+                                        ),
+                                      )
+                                      .toList(),
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['parentAccountCode'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'เลขบัญชี',
+                              ),
+                              initialValue: '',
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['accountCode'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'ชื่อบัญชีภาษาไทย',
+                              ),
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['accountName'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'ชื่อบัญชีภาษาอังกฤษ',
+                              ),
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['accountNameEn'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'คำอธิบายบัญชี',
+                              ),
+                              onChanged: (value) {
+                                var currentSate =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                var createData = currentSate.createData ?? {};
+                                createData['description'] = value;
+                                createData['descriptionEn'] = value;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentSate.copyWith(
+                                      createData: createData,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: 'ประเภทเงินได้ภาษี',
+                              ),
+                              items:
+                                  ['ไม่ระบุ']
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ),
+                                      )
+                                      .toList(),
+                              onChanged: (value) {},
+                            ),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: 'อัตราภาษีหัก ณ ที่จ่าย',
+                              ),
+                              items:
+                                  ['อัตโนมัติ']
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ),
+                                      )
+                                      .toList(),
+                              onChanged: (value) {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('ยกเลิก'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // var currentSate =
+                          //     context.readChartOfAccountBloc().state
+                          //         as ChartOfAccountDataState;
+                          // var createData = currentSate.createData ?? {};
+                          // createData['chartOfAccountLevelCode'] = '313f4765-80f4-43fa-b1da-b5746cf81ede';
+                          // createData['accountingCategoryCode'] = '313f4765-80f4-43fa-b1da-b5746cf81ede';
+                          // context.readChartOfAccountBloc().add(
+                          //   ChartOfAccountUpdateDataEvent(
+                          //     newData: currentSate.copyWith(
+                          //       createData: createData,
+                          //     ),
+                          //   ),
+                          // );
+                          // ChartOfAccountService.create(
+                          //   (context.readChartOfAccountBloc().state
+                          //               as ChartOfAccountDataState)
+                          //           .createData ??
+                          //       {},
+                          // ).then(
+                          //   // ignore: use_build_context_synchronously
+                          //   (value) => context.readChartOfAccountBloc().add(
+                          //     ChartOfAccountGetDataEvent(),
+                          //   ),
+                          // );
+                        },
+                        child: Text('เพิ่มบัญชี'),
+                      ),
+                    ],
+                  )
+                  : SizedBox.shrink(),
+    );
+  }
+}
+
 class ChartOfAccountPage extends StatelessWidget {
   const ChartOfAccountPage({super.key});
+
+  Widget _buildChartOfAccountTile(
+    ChartOfAccount data, {
+    bool isSmalText = false,
+  }) => ListTile(
+    minTileHeight: 50,
+    title: Text(data.name, style: isSmalText ? TextStyle(fontSize: 14) : null),
+    onTap: () {
+      ChartOfAccountDataState currentState =
+          GlobalKeepings.context.readChartOfAccountBloc().state
+              as ChartOfAccountDataState;
+      GlobalKeepings.context.readChartOfAccountBloc().add(
+        ChartOfAccountSelectItemEvent(
+          currentState: currentState,
+          referenceCode: data.referenceCode,
+        ),
+      );
+    },
+  );
 
   Widget _buildChartOfAccountItem(ChartOfAccount data) => ExpansionTile(
     title: Text(data.name),
@@ -15,19 +276,19 @@ class ChartOfAccountPage extends StatelessWidget {
         data.children.map((child) {
           return Padding(
             padding: EdgeInsets.all(8),
-            child: ExpansionTile(
-              title: Text(child.name),
-              children:
-                  child.children.map((subChild) {
-                    return Padding(
-                      padding: EdgeInsets.all(8),
-                      child: ListTile(
-                        minTileHeight: 50,
-                        title: Text(subChild.name, style: TextStyle(fontSize: 14)),
-                      ),
-                    );
-                  }).toList(),
-            ),
+            child:
+                child.children.isNotEmpty
+                    ? ExpansionTile(
+                      title: Text(child.name),
+                      children:
+                          child.children.map((subChild) {
+                            return Padding(
+                              padding: EdgeInsets.all(8),
+                              child: _buildChartOfAccountTile(subChild),
+                            );
+                          }).toList(),
+                    )
+                    : _buildChartOfAccountTile(child),
           );
         }).toList(),
   );
@@ -92,7 +353,12 @@ class ChartOfAccountPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => _AddNewAccountPopup(),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent,
                           ),
@@ -224,65 +490,94 @@ class ChartOfAccountPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          '111201 - ธนาคาร - บัญชีกระแสรายวัน',
-                                          style: TextStyle(
-                                            color: Color(0XFF3b3c66),
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
+                  BlocBuilder<ChartOfAccountBloc, ChartOfAccountState>(
+                    builder: (context, state) {
+                      if (state is ChartOfAccountDataState) {
+                        return Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Card(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                state
+                                                        .currentItemSelect
+                                                        ?.accountName ??
+                                                    '-',
+                                                style: TextStyle(
+                                                  color: Color(0XFF3b3c66),
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          Divider(),
+                                          Column(
+                                            children:
+                                                state.currentItemSelect != null
+                                                    ? [
+                                                      _buildInfoText(
+                                                        'ผังบัญชีหลัก :',
+                                                        state
+                                                                .currentItemSelect
+                                                                ?.mainAccountName ??
+                                                            '-',
+                                                      ),
+                                                      _buildInfoText(
+                                                        'ผังบัญชีรอง :',
+                                                        state
+                                                                .currentItemSelect
+                                                                ?.subAccountName ??
+                                                            '-',
+                                                      ),
+                                                      _buildInfoText(
+                                                        'บัญชีย่อย :',
+                                                        state
+                                                                .currentItemSelect
+                                                                ?.accountName ??
+                                                            '-',
+                                                      ),
+                                                      _buildInfoText(
+                                                        'อัตราภาษีหัก ณ ที่จ่าย :',
+                                                        'อัตโนมัติ',
+                                                      ),
+                                                      _buildInfoText(
+                                                        'ประเภทเงินได้ภาษี :',
+                                                        'ไม่ระบุ',
+                                                      ),
+                                                      _buildInfoText(
+                                                        'คำอธิบาย :',
+                                                        state
+                                                                .currentItemSelect
+                                                                ?.accountDescription ??
+                                                            '-',
+                                                      ),
+                                                    ]
+                                                    : [],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Divider(),
-                                    Column(
-                                      children: [
-                                        _buildInfoText(
-                                          'ผังบัญชีหลัก :',
-                                          '11 สินทรัพย์หมุนเวียน',
-                                        ),
-                                        _buildInfoText(
-                                          'ผังบัญชีรอง :',
-                                          '1 เงินสดและรายการเทียบเท่าเงินสด',
-                                        ),
-                                        _buildInfoText(
-                                          'ผังบัญชีย่อย :',
-                                          '2 บัญชีกระแสรายวัน',
-                                        ),
-                                        _buildInfoText(
-                                          'อัตราภาษีหัก ณ ที่จ่าย :',
-                                          'อัตโนมัติ',
-                                        ),
-                                        _buildInfoText(
-                                          'ประเภทเงินได้ภาษี :',
-                                          'ไม่ระบุ',
-                                        ),
-                                        _buildInfoText('คำอธิบาย :', ''),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
                   ),
                 ],
               ),

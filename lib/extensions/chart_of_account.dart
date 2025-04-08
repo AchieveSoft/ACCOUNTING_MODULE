@@ -8,6 +8,7 @@ extension ChartOfAccountResponseItemDataExtension
     return ChartOfAccount(
       categoryCode: accountingCategoryCode,
       referenceCode: accountCode,
+      parentCode: parentAccountCode,
       name: accountName,
       description: description,
       children:
@@ -20,6 +21,33 @@ extension ChartOfAccountResponseItemDataListExtension
     on List<ChartOfAccountItemResponseData> {
   List<ChartOfAccount> mapToChartOfAccountList() =>
       map((item) => item.mapChartOfAccountModel()).toList();
+
+  List<ChartOfAccount> toFlatMap() {
+    List<ChartOfAccount> allItems = [];
+
+    void collectAccounts(ChartOfAccount account) {
+      allItems.add(
+        ChartOfAccount(
+          categoryCode: account.categoryCode,
+          referenceCode: account.referenceCode,
+          parentCode: account.parentCode,
+          name: account.name,
+          description: account.description,
+          children: [],
+        ),
+      );
+
+      for (ChartOfAccount childItem in account.children) {
+        collectAccounts(childItem);
+      }
+    }
+
+    for (ChartOfAccount item in mapToChartOfAccountList()) {
+      collectAccounts(item);
+    }
+
+    return allItems;
+  }
 }
 
 extension ChartOfAccountResponseDataExtension on ChartOfAccountResponseData {
@@ -37,5 +65,13 @@ extension ChartOfAccountResponseDataListExtension
   List<AccountingCategory> mapToChartOfAccountCategoryList() =>
       map((item) => item.mapToChartOfAccountCategory()).toList();
 
-    
+  List<ChartOfAccount> toFlatMap() {
+    List<ChartOfAccount> allItems = [];
+
+    for (var item in this) {
+      allItems.addAll(item.categoryItems.toFlatMap());
+    }
+
+    return allItems;
+  }
 }
