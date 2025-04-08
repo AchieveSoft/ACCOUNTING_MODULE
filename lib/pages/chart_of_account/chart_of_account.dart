@@ -2,7 +2,6 @@ import 'package:accounting_module/blocs/chart_of_account/bloc.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
-import 'package:accounting_module/pages/chart_of_account/mock_date.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +23,7 @@ class ChartOfAccountPage extends StatelessWidget {
                       padding: EdgeInsets.all(8),
                       child: ListTile(
                         minTileHeight: 50,
-                        title: Text(subChild.name),
+                        title: Text(subChild.name, style: TextStyle(fontSize: 14)),
                       ),
                     );
                   }).toList(),
@@ -42,20 +41,19 @@ class ChartOfAccountPage extends StatelessWidget {
           categoryData.name,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        SizedBox(
-          height: categoryData.chartOfAccountings.length * 58,
-          child: SingleChildScrollView(
-            child: Column(
-              children:
-                  categoryData.chartOfAccountings.map((chartData) {
-                    return _buildChartOfAccountItem(chartData);
-                  }).toList(),
-            ),
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+                categoryData.chartOfAccountings.map((chartData) {
+                  return _buildChartOfAccountItem(chartData);
+                }).toList(),
           ),
         ),
       ],
     ),
   );
+
   Widget _buildInfoText(String title, String text) => Padding(
     padding: EdgeInsets.all(8),
     child: Row(
