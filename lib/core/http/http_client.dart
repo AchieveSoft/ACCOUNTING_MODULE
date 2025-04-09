@@ -4,7 +4,8 @@ class HttpClient {
   late Dio _dioInstance;
 
   HttpClient() {
-    _dioInstance = Dio(BaseOptions(baseUrl: 'http://180.180.156.134:8080')); //[Nil] todo: fix hard code.
+    // _dioInstance = Dio(BaseOptions(baseUrl: 'http://180.180.156.134:8080')); //[Nil] todo: fix hard code.
+    _dioInstance = Dio(BaseOptions(baseUrl: 'http://localhost:8080')); //[Nil] todo: fix hard code.
   }
 
   Future<Map<String, dynamic>> get(String url) async =>

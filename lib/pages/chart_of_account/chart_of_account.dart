@@ -3,7 +3,6 @@ import 'package:accounting_module/core/global_keys.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
-import 'package:accounting_module/services/chart_of_account.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/utils/DialogUtil.dart';
 import 'package:flutter/material.dart';
@@ -467,6 +466,17 @@ class ChartOfAccountPage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    onChanged: (value) {
+                                      if (value.isNotEmpty && value.length >= 3) {
+                                        context.readChartOfAccountBloc().add(
+                                          ChartOfAccountSearchEvent(value),
+                                        );
+                                      } else {
+                                        context.readChartOfAccountBloc().add(
+                                          ChartOfAccountGetDataEvent(),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                                 SizedBox(height: 24),

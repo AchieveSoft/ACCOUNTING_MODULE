@@ -13,6 +13,7 @@ class ChartOfAccountBloc
     extends Bloc<ChartOfAccountEvent, ChartOfAccountState> {
   ChartOfAccountBloc() : super(ChartOfAccountInitState()) {
     on<ChartOfAccountGetDataEvent>(_onGetData);
+    on<ChartOfAccountSearchEvent>(_onSearch);
     on<ChartOfAccountSelectItemEvent>(_onSelectItem);
     on<ChartOfAccountUpdateDataEvent>(_onUpdateData);
     on<ChartOfAccountCreateAccountEvent>(_onCreateAccount);
@@ -61,14 +62,16 @@ class ChartOfAccountBloc
     }
   }
 
-  Future<void> _onGetData(
-    ChartOfAccountGetDataEvent event,
-    Emitter<ChartOfAccountState> emit,
-  ) async {
+  Future<void> _getData(
+    Emitter<ChartOfAccountState> emit, {
+    String? searchKeyword,
+  }) async {
     emit(ChartOfAccountLoadingState());
 
     final List<ChartOfAccountResponseData> response =
-        await ChartOfAccountService.getData();
+        searchKeyword?.isNotEmpty == true
+            ? await ChartOfAccountService.getDataWithSearch(searchKeyword!)
+            : await ChartOfAccountService.getData();
     final List<AccountingCategory> categoryItems =
         response.mapToChartOfAccountCategoryList();
 
@@ -91,6 +94,20 @@ class ChartOfAccountBloc
     if (firstSelect != null) {
       _setItemFromSelectedItem(currentState, firstSelect.referenceCode, emit);
     }
+  }
+
+  Future<void> _onGetData(
+    ChartOfAccountGetDataEvent event,
+    Emitter<ChartOfAccountState> emit,
+  ) async {
+    await _getData(emit);
+  }
+
+  Future<void> _onSearch(
+    ChartOfAccountSearchEvent event,
+    Emitter<ChartOfAccountState> emit,
+  ) async {
+    await _getData(emit, searchKeyword: event.searchKeyword);
   }
 
   Future<void> _onSelectItem(

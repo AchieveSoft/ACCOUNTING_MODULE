@@ -4,6 +4,12 @@ abstract class ChartOfAccountEvent {}
 
 class ChartOfAccountGetDataEvent extends ChartOfAccountEvent {}
 
+class ChartOfAccountSearchEvent extends ChartOfAccountEvent {
+  final String searchKeyword;
+
+  ChartOfAccountSearchEvent(this.searchKeyword);
+}
+
 class ChartOfAccountSelectItemEvent extends ChartOfAccountEvent {
   final ChartOfAccountDataState currentState;
   final String referenceCode;
