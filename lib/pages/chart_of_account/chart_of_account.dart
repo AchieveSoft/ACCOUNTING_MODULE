@@ -5,10 +5,11 @@ import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
 import 'package:accounting_module/services/chart_of_account.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
+import 'package:accounting_module/utils/DialogUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-//[Nil] Popup เละเดี๋ยวมาแก้ ง่วงแล้ว
+//[Nil] Popup เละเดี๋ยวมาแก้ให้สวยขึ้น
 // ignore: unused_element
 class _AddNewAccountPopup extends StatelessWidget {
   @override
@@ -47,15 +48,14 @@ class _AddNewAccountPopup extends StatelessWidget {
                                       )
                                       .toList(),
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['mainAccountCode'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: ChartOfAccountCreateData()
+                                          .updateWith(mainAccountCode: value),
                                     ),
                                   ),
                                 );
@@ -70,8 +70,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                       .where(
                                         (item) =>
                                             item.parentCode ==
-                                            state
-                                                .createData?['mainAccountCode'],
+                                            state.createData?.mainAccountCode,
                                       )
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -81,15 +80,14 @@ class _AddNewAccountPopup extends StatelessWidget {
                                       )
                                       .toList(),
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['parentAccountCode'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(parentAccountCode: value),
                                     ),
                                   ),
                                 );
@@ -101,15 +99,14 @@ class _AddNewAccountPopup extends StatelessWidget {
                               ),
                               initialValue: '',
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['accountCode'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(accountCode: value),
                                     ),
                                   ),
                                 );
@@ -120,15 +117,14 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 labelText: 'ชื่อบัญชีภาษาไทย',
                               ),
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['accountName'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(accountName: value),
                                     ),
                                   ),
                                 );
@@ -139,15 +135,14 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 labelText: 'ชื่อบัญชีภาษาอังกฤษ',
                               ),
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['accountNameEn'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(accountNameEn: value),
                                     ),
                                   ),
                                 );
@@ -158,16 +153,32 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 labelText: 'คำอธิบายบัญชี',
                               ),
                               onChanged: (value) {
-                                var currentSate =
+                                var currentState =
                                     context.readChartOfAccountBloc().state
                                         as ChartOfAccountDataState;
-                                var createData = currentSate.createData ?? {};
-                                createData['description'] = value;
-                                createData['descriptionEn'] = value;
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
-                                    newData: currentSate.copyWith(
-                                      createData: createData,
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(description: value),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'คำอธิบายบัญชีภาษาอังกฤษ',
+                              ),
+                              onChanged: (value) {
+                                var currentState =
+                                    context.readChartOfAccountBloc().state
+                                        as ChartOfAccountDataState;
+                                context.readChartOfAccountBloc().add(
+                                  ChartOfAccountUpdateDataEvent(
+                                    newData: currentState.copyWith(
+                                      createData: currentState.createData!
+                                          .updateWith(descriptionEn: value),
                                     ),
                                   ),
                                 );
@@ -213,33 +224,30 @@ class _AddNewAccountPopup extends StatelessWidget {
                         child: Text('ยกเลิก'),
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                        ),
                         onPressed: () {
-                          // var currentSate =
-                          //     context.readChartOfAccountBloc().state
-                          //         as ChartOfAccountDataState;
-                          // var createData = currentSate.createData ?? {};
-                          // createData['chartOfAccountLevelCode'] = '313f4765-80f4-43fa-b1da-b5746cf81ede';
-                          // createData['accountingCategoryCode'] = '313f4765-80f4-43fa-b1da-b5746cf81ede';
-                          // context.readChartOfAccountBloc().add(
-                          //   ChartOfAccountUpdateDataEvent(
-                          //     newData: currentSate.copyWith(
-                          //       createData: createData,
-                          //     ),
-                          //   ),
-                          // );
-                          // ChartOfAccountService.create(
-                          //   (context.readChartOfAccountBloc().state
-                          //               as ChartOfAccountDataState)
-                          //           .createData ??
-                          //       {},
-                          // ).then(
-                          //   // ignore: use_build_context_synchronously
-                          //   (value) => context.readChartOfAccountBloc().add(
-                          //     ChartOfAccountGetDataEvent(),
-                          //   ),
-                          // );
+                          context.readChartOfAccountBloc().add(
+                            ChartOfAccountCreateAccountEvent(
+                              currentState:
+                                  context.readChartOfAccountBloc().state
+                                      as ChartOfAccountDataState,
+                            ),
+                          );
+                          context.readChartOfAccountBloc().add(
+                            ChartOfAccountGetDataEvent(),
+                          );
+                          Navigator.pop(context);
+                          Dialogutil.showAlertDiaglog(
+                            "ดำเนินการสำเร็จ",
+                            "เพิ่มบัญชีสำเร็จ",
+                          );
                         },
-                        child: Text('เพิ่มบัญชี'),
+                        child: Text(
+                          'เพิ่มบัญชี',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   )
@@ -370,7 +378,12 @@ class ChartOfAccountPage extends StatelessWidget {
                         ),
                         SizedBox(width: 16),
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Dialogutil.showAlertDiaglog(
+                              "โปรดรอ",
+                              "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purpleAccent,
                           ),
@@ -382,7 +395,12 @@ class ChartOfAccountPage extends StatelessWidget {
                         ),
                         SizedBox(width: 16),
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Dialogutil.showAlertDiaglog(
+                              "โปรดรอ",
+                              "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),

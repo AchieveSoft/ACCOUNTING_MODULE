@@ -16,3 +16,9 @@ class ChartOfAccountUpdateDataEvent extends ChartOfAccountEvent {
 
   ChartOfAccountUpdateDataEvent({required this.newData});
 }
+
+class ChartOfAccountCreateAccountEvent extends ChartOfAccountEvent {
+  final ChartOfAccountDataState currentState;
+
+  ChartOfAccountCreateAccountEvent({required this.currentState});
+}

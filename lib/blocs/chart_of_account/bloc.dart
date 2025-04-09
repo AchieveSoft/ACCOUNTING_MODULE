@@ -1,6 +1,7 @@
 import 'package:accounting_module/extensions/chart_of_account.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
+import 'package:accounting_module/models/requests/chart_of_account.dart';
 import 'package:accounting_module/models/responses/chart_of_account.dart';
 import 'package:accounting_module/services/chart_of_account.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,49 +15,30 @@ class ChartOfAccountBloc
     on<ChartOfAccountGetDataEvent>(_onGetData);
     on<ChartOfAccountSelectItemEvent>(_onSelectItem);
     on<ChartOfAccountUpdateDataEvent>(_onUpdateData);
+    on<ChartOfAccountCreateAccountEvent>(_onCreateAccount);
   }
 
-  Future<void> _onGetData(
-    ChartOfAccountGetDataEvent event,
+  void _setItemFromSelectedItem(
+    ChartOfAccountDataState currentState,
+    String referenceCode,
     Emitter<ChartOfAccountState> emit,
-  ) async {
-    emit(ChartOfAccountLoadingState());
-
-    final List<ChartOfAccountResponseData> response =
-        await ChartOfAccountService.getData();
-
-    List<ChartOfAccount> allItems = response.toFlatMap();
-
-    emit(
-      ChartOfAccountDataState(
-        allItems: allItems,
-        categoryItems: response.mapToChartOfAccountCategoryList(),
-      ),
-    );
-  }
-
-  Future<void> _onSelectItem(
-    ChartOfAccountSelectItemEvent event,
-    Emitter<ChartOfAccountState> emit,
-  ) async {
-    emit(ChartOfAccountLoadingState());
-
+  ) {
     var itemSelect =
-        event.currentState.allItems
-            .where((item) => item.referenceCode == event.referenceCode)
+        currentState.allItems
+            .where((item) => item.referenceCode == referenceCode)
             .first;
     var subAccountItem =
-        event.currentState.allItems
+        currentState.allItems
             .where((item) => item.referenceCode == itemSelect.parentCode)
             .first;
     var mainAccountItem =
-        event.currentState.allItems
+        currentState.allItems
             .where((item) => item.referenceCode == subAccountItem.parentCode)
             .firstOrNull;
 
     if (mainAccountItem != null) {
       emit(
-        event.currentState.copyWith(
+        currentState.copyWith(
           currentItemSelect: ChartOfAccountItemSelected(
             mainAccountName: mainAccountItem.name,
             subAccountName: subAccountItem.name,
@@ -67,7 +49,7 @@ class ChartOfAccountBloc
       );
     } else {
       emit(
-        event.currentState.copyWith(
+        currentState.copyWith(
           currentItemSelect: ChartOfAccountItemSelected(
             mainAccountName: subAccountItem.name,
             subAccountName: itemSelect.name,
@@ -79,10 +61,69 @@ class ChartOfAccountBloc
     }
   }
 
+  Future<void> _onGetData(
+    ChartOfAccountGetDataEvent event,
+    Emitter<ChartOfAccountState> emit,
+  ) async {
+    emit(ChartOfAccountLoadingState());
+
+    final List<ChartOfAccountResponseData> response =
+        await ChartOfAccountService.getData();
+    final List<AccountingCategory> categoryItems =
+        response.mapToChartOfAccountCategoryList();
+
+    List<ChartOfAccount> allItems = response.toFlatMap();
+    final ChartOfAccountDataState currentState = ChartOfAccountDataState(
+      allItems: allItems,
+      categoryItems: categoryItems,
+    );
+
+    emit(currentState);
+
+    ChartOfAccount? firstSelect =
+        allItems
+            .where(
+              (item) =>
+                  item.parentCode?.isNotEmpty == true && item.children.isEmpty,
+            )
+            .firstOrNull;
+
+    if (firstSelect != null) {
+      _setItemFromSelectedItem(currentState, firstSelect.referenceCode, emit);
+    }
+  }
+
+  Future<void> _onSelectItem(
+    ChartOfAccountSelectItemEvent event,
+    Emitter<ChartOfAccountState> emit,
+  ) async {
+    emit(ChartOfAccountLoadingState());
+    _setItemFromSelectedItem(event.currentState, event.referenceCode, emit);
+  }
+
   Future<void> _onUpdateData(
     ChartOfAccountUpdateDataEvent event,
     Emitter<ChartOfAccountState> emit,
   ) async {
     emit(event.newData);
+  }
+
+  Future<void> _onCreateAccount(
+    ChartOfAccountCreateAccountEvent event,
+    Emitter<ChartOfAccountState> emit,
+  ) async {
+    emit(ChartOfAccountLoadingState());
+    await ChartOfAccountService.create(
+      ChartOfAccountRequest(
+        accountCode: event.currentState.createData!.accountCode,
+
+        accountName: event.currentState.createData!.accountName,
+        accountNameEn: event.currentState.createData!.accountNameEn,
+        description: event.currentState.createData!.description,
+        descriptionEn: event.currentState.createData!.descriptionEn,
+        parentAccountCode: event.currentState.createData!.parentAccountCode,
+      ).toJson(),
+    );
+    emit(event.currentState);
   }
 }
