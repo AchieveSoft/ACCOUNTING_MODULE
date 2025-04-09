@@ -501,16 +501,6 @@ class ChartOfAccountPage extends StatelessWidget {
                                     }
                                   },
                                 ),
-                                // Expanded(
-                                //   child: ListView.builder(
-                                //     itemCount: mockAccountingCategories.length,
-                                //     itemBuilder:
-                                //         (context, index) =>
-                                //             _buildAccountingCategory(
-                                //               mockAccountingCategories[index],
-                                //             ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
