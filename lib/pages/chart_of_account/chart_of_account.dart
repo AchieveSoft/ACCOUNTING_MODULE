@@ -466,8 +466,8 @@ class ChartOfAccountPage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    onChanged: (value) {
-                                      if (value.isNotEmpty && value.length >= 3) {
+                                    onSubmitted: (value) {
+                                      if (value.isNotEmpty) {
                                         context.readChartOfAccountBloc().add(
                                           ChartOfAccountSearchEvent(value),
                                         );
