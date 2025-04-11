@@ -30,6 +30,15 @@ class DrawerItemConfig {
       ],
     ),
     DrawerItem(
+      icon: Icons.table_chart,
+      title: 'ข้อมูล',
+      menuItem: [
+        MenuItem(title: 'สินค้า/บริการ', onTap: () {}),
+        MenuItem(title: 'หน่วย', onTap: () {}),
+        MenuItem(title: 'ผู้ติดต่อ', onTap: () {}),
+      ],
+    ),
+    DrawerItem(
       icon: Icons.settings,
       title: 'ตั้งค่า',
       menuItem: [MenuItem(title: 'บัญชี', onTap: () {})],
