@@ -12,6 +12,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class UnitMasterPage extends StatelessWidget {
   final TextEditingController _unitCodeTextFieldController =
       TextEditingController();
