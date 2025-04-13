@@ -127,7 +127,6 @@ class UnitMasterPage extends StatelessWidget {
             ),
             controller: _unitNameEnTextFieldController,
             focusNode: _unitNameEnFocusNode,
-            onSubmitted: (value) {},
           ),
         ],
       ),
@@ -201,12 +200,13 @@ class UnitMasterPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ElevatedButton(
+                      ElevatedButton.icon(
                         onPressed: () => _showAddDialog(context),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
                         ),
-                        child: Text(
+                        icon: Icon(Icons.add, color: Colors.white),
+                        label: Text(
                           'เพิ่มหน่วยใหม่',
                           style: TextStyle(color: Colors.white),
                         ),
@@ -221,8 +221,8 @@ class UnitMasterPage extends StatelessWidget {
                 if (state is UnitMasterDataState) {
                   return Expanded(
                     child: PaginatedDataTable2(
-                      rowsPerPage: 20,
-                      dataRowHeight: 58,
+                      rowsPerPage: 15,
+                      dataRowHeight: 46,
                       border: TableBorder(
                         left: BorderSide(color: Color(0XFFecf0f1)),
                         right: BorderSide(color: Color(0XFFecf0f1)),
@@ -261,7 +261,7 @@ class UnitMasterPage extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(height: MediaQueryUtil.getScreenHeightPercent(10)),
+            // SizedBox(height: MediaQueryUtil.getScreenHeightPercent(5)),
           ],
         ),
       ),
