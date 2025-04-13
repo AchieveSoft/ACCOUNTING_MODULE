@@ -7,7 +7,7 @@ class Dialogutil {
       context: GlobalKeepings.context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
+          title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
           content: Text(text),
           actions: [
             TextButton(
@@ -15,6 +15,39 @@ class Dialogutil {
                 Navigator.of(context).pop();
               },
               child: Text('ตกลง'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static showConfirmDialog({
+    required String title,
+    required String text,
+    required Function onConfirm,
+    required Function onCancel,
+  }) {
+    showDialog(
+      context: GlobalKeepings.context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+          content: Text(text),
+          actions: [
+            TextButton(
+              onPressed: () {
+                onConfirm();
+                Navigator.of(context).pop();
+              },
+              child: Text('ตกลง'),
+            ),
+            TextButton(
+              onPressed: () {
+                onCancel();
+                Navigator.of(context).pop();
+              },
+              child: Text('ยกเลิก'),
             ),
           ],
         );

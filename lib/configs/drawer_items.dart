@@ -1,3 +1,5 @@
+import 'package:accounting_module/configs/routes.dart';
+import 'package:accounting_module/core/global_keepings.dart';
 import 'package:flutter/material.dart';
 import 'package:accounting_module/models/drawer_item.dart';
 
@@ -25,7 +27,13 @@ class DrawerItemConfig {
       icon: Icons.account_box,
       title: 'บัญชี',
       menuItem: [
-        MenuItem(title: 'ผังบัญชี', onTap: () {}),
+        MenuItem(
+          title: 'ผังบัญชี',
+          onTap:
+              () => Navigator.of(
+                GlobalKeepings.context,
+              ).pushNamed(RoutePaths.chartOfAccount),
+        ),
         MenuItem(title: 'งบทดลอง', onTap: () {}),
       ],
     ),
@@ -34,7 +42,13 @@ class DrawerItemConfig {
       title: 'ข้อมูล',
       menuItem: [
         MenuItem(title: 'สินค้า/บริการ', onTap: () {}),
-        MenuItem(title: 'หน่วย', onTap: () {}),
+        MenuItem(
+          title: 'หน่วย',
+          onTap:
+              () => Navigator.of(
+                GlobalKeepings.context,
+              ).pushNamed(RoutePaths.unitMaster),
+        ),
         MenuItem(title: 'ผู้ติดต่อ', onTap: () {}),
       ],
     ),
