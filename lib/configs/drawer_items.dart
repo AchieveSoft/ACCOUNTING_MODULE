@@ -5,8 +5,14 @@ import 'package:accounting_module/models/drawer_item.dart';
 
 class DrawerItemConfig {
   static List<DrawerItem> items = [
-    DrawerItem(icon: Icons.dashboard, title: 'แดชบอร์ด', menuItem: []),
     DrawerItem(
+      key: 'dashboard',
+      icon: Icons.dashboard,
+      title: 'แดชบอร์ด',
+      menuItem: [],
+    ),
+    DrawerItem(
+      key: 'revenue',
       icon: Icons.attach_money,
       title: 'รายรับ',
       menuItem: [
@@ -16,6 +22,7 @@ class DrawerItemConfig {
       ],
     ),
     DrawerItem(
+      key: 'expenses',
       icon: Icons.book_online,
       title: 'รายจ่าย',
       menuItem: [
@@ -24,6 +31,7 @@ class DrawerItemConfig {
       ],
     ),
     DrawerItem(
+      key: 'accounts',
       icon: Icons.account_box,
       title: 'บัญชี',
       menuItem: [
@@ -38,6 +46,7 @@ class DrawerItemConfig {
       ],
     ),
     DrawerItem(
+      key: 'master',
       icon: Icons.table_chart,
       title: 'ข้อมูล',
       menuItem: [
@@ -53,10 +62,16 @@ class DrawerItemConfig {
       ],
     ),
     DrawerItem(
+      key: 'setting',
       icon: Icons.settings,
       title: 'ตั้งค่า',
       menuItem: [MenuItem(title: 'บัญชี', onTap: () {})],
     ),
-    DrawerItem(icon: Icons.logout, title: 'ออกจากระบบ', menuItem: []),
+    DrawerItem(
+      key: 'logout',
+      icon: Icons.logout,
+      title: 'ออกจากระบบ',
+      menuItem: [],
+    ),
   ];
 }

@@ -1,22 +1,27 @@
 import 'dart:io';
 
+import 'package:accounting_module/blocs/common_scaffold/bloc.dart';
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:accounting_module/utils/media_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:accounting_module/configs/drawer_items.dart';
 import 'package:accounting_module/models/drawer_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 
 // ignore: must_be_immutable
 class _Menu extends StatefulWidget {
+  final String drawerKey;
   final IconData icon;
   final String title;
   final List<MenuItem> menuItems;
   Function? onTap;
 
   _Menu({
+    required this.drawerKey,
     required this.icon,
     required this.title,
     required this.menuItems,
@@ -40,11 +45,24 @@ class _MenuState extends State<_Menu> {
     textColor: const Color.fromRGBO(255, 255, 255, 1),
     leading: Icon(Icons.label),
     title: Text(title, style: TextStyle(fontSize: 14)),
-    onTap: () => onTap(),
+    onTap: () {
+      onTap();
+      context.readCommonScaffoldBloc().add(
+        CommonScaffoldSelectMenuEvent(key: widget.drawerKey, title: title),
+      );
+    },
   );
 
   @override
   Widget build(BuildContext context) {
+    final CommonScaffoldState state = context.readCommonScaffoldBloc().state;
+
+    if (state.currentSelectKey == widget.drawerKey) {
+      setState(() {
+        _isShowItem = true;
+      });
+    }
+
     List<Widget> menuItemsToShow =
         _isShowItem
             ? widget.menuItems
@@ -134,6 +152,7 @@ class _SliderMenu extends StatelessWidget {
         Padding(padding: EdgeInsets.all(8), child: Divider()),
         ...DrawerItemConfig.items.map(
           (item) => _Menu(
+            drawerKey: item.key,
             icon: item.icon,
             title: item.title,
             menuItems: item.menuItem,
