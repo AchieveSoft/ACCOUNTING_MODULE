@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:accounting_module/utils/media_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -167,11 +168,18 @@ class _CommonScaffoldState extends State<CommonScaffold> {
                 IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () {
-                    exit(0);
+                    Dialogutil.showConfirmDialog(
+                      title: 'ยืนยันการดำเนินการ',
+                      text: 'คุณต้องการปิดโปรแกรมใช่หรือไม่',
+                      onConfirm: () {
+                        exit(0);
+                      },
+                      onCancel: () {},
+                    );
                   },
                 ),
-                _sliderDrawerKey.currentState?.isDrawerOpen == true
-                    ? SizedBox(width: _drawerWidth)
+                MediaQueryUtil.isDesktopScreen == true
+                    ? SizedBox(width: _drawerWidth - 16)
                     : SizedBox.shrink(),
               ],
             ),
