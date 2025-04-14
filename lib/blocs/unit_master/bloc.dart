@@ -11,7 +11,7 @@ part 'state.dart';
 class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
   UnitMasterBloc() : super(UnitMasterInitialState()) {
     on<UnitMasterGetDataEvent>(_onGetData);
-    on<UnitMasterCreateEvent>(_onCreateUnit);
+    on<UnitMasterCreateOrUpdateEvent>(_onCreateOrUpdateUnit);
     on<UnitMasterDeleteEvent>(_onDeleteUnit);
   }
 
@@ -28,21 +28,26 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
     await _getData(emit);
   }
 
-  Future<void> _onCreateUnit(
-    UnitMasterCreateEvent event,
+  Future<void> _onCreateOrUpdateUnit(
+    UnitMasterCreateOrUpdateEvent event,
     Emitter<UnitMasterState> emit,
   ) async {
-    final BaseResponse response = await UnitMasterService.createUnit(
-      UnitMasterRequest(
-        unitCode: event.unitCode,
-        unitName: event.unitName,
-        unitNameEn: event.unitNameEn,
-        unitType: event.type,
-      ),
+    final UnitMasterRequest reqData = UnitMasterRequest(
+      unitCode: event.unitCode,
+      unitName: event.unitName,
+      unitNameEn: event.unitNameEn,
+      unitType: event.type,
     );
+    final BaseResponse response =
+        event.isEdit
+            ? await UnitMasterService.updateUnit(reqData)
+            : await UnitMasterService.createUnit(reqData);
 
     if (response.success) {
-      Dialogutil.showAlertDiaglog('ดำเนินการสำเร็จ', 'เพิ่มหน่วยสำเร็จ');
+      Dialogutil.showAlertDiaglog(
+        'ดำเนินการสำเร็จ',
+        event.isEdit ? 'แก้ไขหน่วยสำเร็จ' : 'เพิ่มหน่วยสำเร็จ',
+      );
       await _getData(emit);
     } else {
       Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
@@ -53,7 +58,9 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
     UnitMasterDeleteEvent event,
     Emitter<UnitMasterState> emit,
   ) async {
-    final BaseResponse response = await UnitMasterService.deleteUnit(event.unitCode);
+    final BaseResponse response = await UnitMasterService.deleteUnit(
+      event.unitCode,
+    );
 
     if (response.success) {
       Dialogutil.showAlertDiaglog('ดำเนินการสำเร็จ', 'ลบหน่วยสำเร็จ');

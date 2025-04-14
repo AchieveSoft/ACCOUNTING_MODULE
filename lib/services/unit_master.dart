@@ -31,6 +31,15 @@ class UnitMasterService {
     }
   }
 
+  static Future<BaseResponse<String>> updateUnit(UnitMasterRequest req) async {
+    try {
+        final Map<String, dynamic> response = await _http.post('/api/master/unit/v1/update', req.toJson());
+        return BaseResponse.fromJson(response);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
   static Future<BaseResponse<String>> deleteUnit(String unitCode) async {
     try {
         final Map<String, dynamic> response = await _http.delete('/api/master/unit/v1/delete/$unitCode');

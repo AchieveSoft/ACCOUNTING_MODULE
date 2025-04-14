@@ -31,112 +31,125 @@ class UnitMasterPage extends StatelessWidget {
     '',
   ];
   final Map<String, int> addTypeDropdownItemMap = {'สินค้า': 1, 'บริการ': 2};
-  int _addTypeValue = 0;
+  int _addOrEditTypeValue = 0;
 
   UnitMasterPage({super.key});
 
-  Widget _buildAddDialogContent(BuildContext context) => SizedBox(
-    width: 350,
-    height: 350,
-    child: Padding(
-      padding: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('ประเภท', style: TextStyle(fontWeight: FontWeight.bold)),
-          DropdownButtonFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
+  Widget _buildAddDialogContent(BuildContext context, {bool isEdit = false}) =>
+      SizedBox(
+        width: 350,
+        height: 350,
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('ประเภท', style: TextStyle(fontWeight: FontWeight.bold)),
+              DropdownButtonFormField(
+                value: isEdit ? _addOrEditTypeValue : null,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                ),
+                items:
+                    addTypeDropdownItemMap.entries
+                        .map(
+                          (item) => DropdownMenuItem(
+                            value: item.value,
+                            child: Text(item.key),
+                          ),
+                        )
+                        .toList(),
+                onChanged: (value) {
+                  _addOrEditTypeValue = value ?? 0;
+                },
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
+              SizedBox(height: 16),
+              Text('รหัสหน่วย', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                ),
+                controller: _unitCodeTextFieldController,
+                focusNode: _unitCodeFocusNode,
+                onSubmitted: (value) {},
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
+              SizedBox(height: 16),
+              Text(
+                'ชื่อหน่วยภาษาไทย',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
-            items:
-                addTypeDropdownItemMap.entries
-                    .map(
-                      (item) => DropdownMenuItem(
-                        value: item.value,
-                        child: Text(item.key),
-                      ),
-                    )
-                    .toList(),
-            onChanged: (value) {
-              _addTypeValue = value ?? 0;
-            },
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                ),
+                controller: _unitNameTextFieldController,
+                focusNode: _unitNameFocusNode,
+                onSubmitted: (value) {},
+              ),
+              SizedBox(height: 16),
+              Text(
+                'ชื่อหน่วยภาษาอังกฤษ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
+                  ),
+                ),
+                controller: _unitNameEnTextFieldController,
+                focusNode: _unitNameEnFocusNode,
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          Text('รหัสหน่วย', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-            ),
-            controller: _unitCodeTextFieldController,
-            focusNode: _unitCodeFocusNode,
-            onSubmitted: (value) {},
-          ),
-          SizedBox(height: 16),
-          Text(
-            'ชื่อหน่วยภาษาไทย',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-            ),
-            controller: _unitNameTextFieldController,
-            focusNode: _unitNameFocusNode,
-            onSubmitted: (value) {},
-          ),
-          SizedBox(height: 16),
-          Text(
-            'ชื่อหน่วยภาษาอังกฤษ',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFFdadbe6)),
-              ),
-            ),
-            controller: _unitNameEnTextFieldController,
-            focusNode: _unitNameEnFocusNode,
-          ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
-  _showAddDialog(BuildContext context) {
-    _unitCodeTextFieldController.text = '';
-    _unitNameTextFieldController.text = '';
-    _unitNameEnTextFieldController.text = '';
+  _showAddOrEditDialog(
+    BuildContext context, {
+    bool isEdit = false,
+    UnitMasterData? data,
+  }) {
+    if (isEdit) {
+      _addOrEditTypeValue = data!.unitType;
+      _unitCodeTextFieldController.text = data.unitCode;
+      _unitNameTextFieldController.text = data.unitName;
+      _unitNameEnTextFieldController.text = data.unitNameEn;
+    } else {
+      _unitCodeTextFieldController.text = '';
+      _unitNameTextFieldController.text = '';
+      _unitNameEnTextFieldController.text = '';
+    }
 
     showDialog(
       context: context,
@@ -146,7 +159,7 @@ class UnitMasterPage extends StatelessWidget {
               'เพิ่มหน่วยใหม่',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            content: _buildAddDialogContent(context),
+            content: _buildAddDialogContent(context, isEdit: isEdit),
             actions: [
               TextButton(
                 onPressed: () {
@@ -157,9 +170,10 @@ class UnitMasterPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   context.readUnitMasterBloc().add(
-                    UnitMasterCreateEvent(
+                    UnitMasterCreateOrUpdateEvent(
+                      isEdit: isEdit,
                       unitCode: _unitCodeTextFieldController.text,
-                      type: _addTypeValue,
+                      type: _addOrEditTypeValue,
                       unitName: _unitNameTextFieldController.text,
                       unitNameEn: _unitNameEnTextFieldController.text,
                     ),
@@ -201,7 +215,7 @@ class UnitMasterPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(
-                        onPressed: () => _showAddDialog(context),
+                        onPressed: () => _showAddOrEditDialog(context),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
                         ),
@@ -251,7 +265,16 @@ class UnitMasterPage extends StatelessWidget {
                                 ),
                               )
                               .toList(),
-                      source: UnitMasterDataSource(items: state.items),
+                      source: UnitMasterDataSource(
+                        items: state.items,
+                        onEdit: (value) {
+                          _showAddOrEditDialog(
+                            context,
+                            isEdit: true,
+                            data: value,
+                          );
+                        },
+                      ),
                     ),
                   );
                 } else {
@@ -271,8 +294,9 @@ class UnitMasterPage extends StatelessWidget {
 
 class UnitMasterDataSource extends DataTableSource {
   final List<UnitMasterData> items;
+  final Function(UnitMasterData) onEdit;
 
-  UnitMasterDataSource({required this.items});
+  UnitMasterDataSource({required this.items, required this.onEdit});
 
   @override
   DataRow? getRow(int index) {
@@ -287,8 +311,8 @@ class UnitMasterDataSource extends DataTableSource {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // EditIconButton(onPressed: () {}),
-              // SizedBox(width: 16),
+              EditIconButton(onPressed: () => onEdit(items[index])),
+              SizedBox(width: 16),
               DeleteIconButton(
                 onPressed: () {
                   Dialogutil.showConfirmDialog(
