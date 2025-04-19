@@ -8,12 +8,15 @@ final InputDecoration commonInputDecoration = InputDecoration(
   enabledBorder: _border,
   focusedBorder: _border,
 );
+final InputDecoration inputDecorationBorderNone = InputDecoration(border: InputBorder.none);
 
 InputDecoration buildCommonInputDecoration({
   String? labelText,
   Widget? label,
   Widget? suffix,
   Widget? suffixIcon,
+  bool? isDense,
+  String? hintText,
 }) => InputDecoration(
   border: _border,
   enabledBorder: _border,
@@ -22,4 +25,6 @@ InputDecoration buildCommonInputDecoration({
   label: label,
   suffix: suffix,
   suffixIcon: suffixIcon,
+  isDense: isDense,
+  hintText: hintText,
 );

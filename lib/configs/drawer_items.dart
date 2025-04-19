@@ -26,7 +26,13 @@ class DrawerItemConfig {
       icon: Icons.book_online,
       title: 'รายจ่าย',
       menuItem: [
-        MenuItem(title: 'ใบสั่งซิ้อ', onTap: () {}),
+        MenuItem(
+          title: 'ใบสั่งซิ้อ',
+          onTap:
+              () => Navigator.of(
+                GlobalKeepings.context,
+              ).pushNamed(RoutePaths.purchaseOrder),
+        ),
         MenuItem(title: 'ใบจ่ายเงินมัดจำ', onTap: () {}),
       ],
     ),

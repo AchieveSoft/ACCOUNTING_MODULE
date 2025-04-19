@@ -162,6 +162,7 @@ class UnitMasterPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'หน่วย',
@@ -171,22 +172,15 @@ class UnitMasterPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () => _showAddOrEditDialog(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                        ),
-                        icon: Icon(Icons.add, color: Colors.white),
-                        label: Text(
-                          'เพิ่มหน่วยใหม่',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                ElevatedButton.icon(
+                  onPressed: () => _showAddOrEditDialog(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                  ),
+                  icon: Icon(Icons.add, color: Colors.white),
+                  label: Text(
+                    'เพิ่มหน่วยใหม่',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
