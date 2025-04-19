@@ -4,6 +4,7 @@ import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
+import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -447,24 +448,9 @@ class ChartOfAccountPage extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.all(8),
                                   child: TextField(
-                                    decoration: InputDecoration(
+                                    decoration: buildCommonInputDecoration(
                                       labelText: 'ค้นหารายการ',
                                       suffixIcon: Icon(Icons.search),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0XFFdadbe6),
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0XFFdadbe6),
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0XFFdadbe6),
-                                        ),
-                                      ),
                                     ),
                                     onSubmitted: (value) {
                                       if (value.isNotEmpty) {

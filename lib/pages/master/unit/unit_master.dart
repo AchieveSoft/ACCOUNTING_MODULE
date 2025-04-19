@@ -6,6 +6,7 @@ import 'package:accounting_module/extensions/unit_master.dart';
 import 'package:accounting_module/models/unit_master.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
+import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:accounting_module/utils/media_query.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -47,17 +48,7 @@ class UnitMasterPage extends StatelessWidget {
               Text('ประเภท', style: TextStyle(fontWeight: FontWeight.bold)),
               DropdownButtonFormField(
                 value: isEdit ? _addOrEditTypeValue : null,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                ),
+                decoration: commonInputDecoration,
                 items:
                     addTypeDropdownItemMap.entries
                         .map(
@@ -74,17 +65,7 @@ class UnitMasterPage extends StatelessWidget {
               SizedBox(height: 16),
               Text('รหัสหน่วย', style: TextStyle(fontWeight: FontWeight.bold)),
               TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                ),
+                decoration: commonInputDecoration,
                 controller: _unitCodeTextFieldController,
                 focusNode: _unitCodeFocusNode,
                 onSubmitted: (value) {},
@@ -95,17 +76,7 @@ class UnitMasterPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                ),
+                decoration: commonInputDecoration,
                 controller: _unitNameTextFieldController,
                 focusNode: _unitNameFocusNode,
                 onSubmitted: (value) {},
@@ -116,17 +87,7 @@ class UnitMasterPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0XFFdadbe6)),
-                  ),
-                ),
+                decoration: commonInputDecoration,
                 controller: _unitNameEnTextFieldController,
                 focusNode: _unitNameEnFocusNode,
               ),
