@@ -12,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PurchaseOrderPage extends StatelessWidget {
-  final TextEditingController _duedateTextFieldController = TextEditingController();
+  final TextEditingController _duedateTextFieldController =
+      TextEditingController();
 
   PurchaseOrderPage({super.key});
 
@@ -218,7 +219,8 @@ class PurchaseOrderPage extends StatelessWidget {
                                     controller:
                                         TextEditingController()
                                           ..text =
-                                              state.createOrUpdateData?.docNo ?? '',
+                                              state.createOrUpdateData?.docNo ??
+                                              '',
                                     onChanged: (value) {},
                                   ),
                                 ),
@@ -250,7 +252,9 @@ class PurchaseOrderPage extends StatelessWidget {
                                           ),
                                         ),
                                         value:
-                                            state.createOrUpdateData?.contractCode ??
+                                            state
+                                                .createOrUpdateData
+                                                ?.contractCode ??
                                             '',
                                         items: [
                                           DropdownMenuItem(
@@ -283,7 +287,10 @@ class PurchaseOrderPage extends StatelessWidget {
                                     controller:
                                         _duedateTextFieldController
                                           ..text =
-                                              state.createOrUpdateData?.dueDate ?? '',
+                                              state
+                                                  .createOrUpdateData
+                                                  ?.dueDate ??
+                                              '',
                                     readOnly: true,
                                     onTap: () {
                                       final DateTime now = DateTime.now();
@@ -378,10 +385,11 @@ class PurchaseOrderPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            ...state.createOrUpdateData!.transactions.indexed.map(
-                              (entry) =>
-                                  _buildTransactionRow(entry.$2, entry.$1),
-                            ),
+                            ...state.createOrUpdateData!.transactions.indexed
+                                .map(
+                                  (entry) =>
+                                      _buildTransactionRow(entry.$2, entry.$1),
+                                ),
                             SizedBox(height: 16),
                             Divider(),
                             SizedBox(height: 16),
@@ -493,7 +501,17 @@ class PurchaseOrderPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 16),
                                 ElevatedButton.icon(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.readPurchaseOrderBloc().add(
+                                      PurchaseOrderCreateEvent(
+                                        currentState:
+                                            context
+                                                    .readPurchaseOrderBloc()
+                                                    .state
+                                                as PurchaseOrderDataState,
+                                      ),
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blueAccent,
                                   ),
@@ -505,7 +523,17 @@ class PurchaseOrderPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 16),
                                 ElevatedButton.icon(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.readPurchaseOrderBloc().add(
+                                      PurchaseOrderCreateEvent(
+                                        currentState:
+                                            context
+                                                    .readPurchaseOrderBloc()
+                                                    .state
+                                                as PurchaseOrderDataState,
+                                      ),
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.purpleAccent,
                                   ),

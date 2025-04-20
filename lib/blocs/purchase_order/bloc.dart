@@ -1,5 +1,8 @@
 import 'package:accounting_module/models/purchase_order.dart';
+import 'package:accounting_module/models/responses/base_response.dart';
+import 'package:accounting_module/services/purchase_order.dart';
 import 'package:accounting_module/shared/widgets/common_loader.dart';
+import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'event.dart';
@@ -10,6 +13,7 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     on<PurchaseOrderGetDataEvent>(_onGetData);
     on<PurchaseOrderAddTransactionEvent>(_onAddTransaction);
     on<PurchaseOrderRemoveTransaction>(_onRemoveTransaction);
+    on<PurchaseOrderCreateEvent>(_onCreate);
   }
 
   PurchaseOrderTransaction _buildDraftTransaction() => PurchaseOrderTransaction(
@@ -58,7 +62,8 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     PurchaseOrderAddTransactionEvent event,
     Emitter<PurchaseOrderState> emit,
   ) async {
-    final PurchaseOrder currentCreateData = event.currentState.createOrUpdateData!;
+    final PurchaseOrder currentCreateData =
+        event.currentState.createOrUpdateData!;
     currentCreateData.transactions = [
       ...currentCreateData.transactions,
       _buildDraftTransaction(),
@@ -71,7 +76,8 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     PurchaseOrderRemoveTransaction event,
     Emitter<PurchaseOrderState> emit,
   ) async {
-    final PurchaseOrder createOrUpdateData = event.currentState.createOrUpdateData!;
+    final PurchaseOrder createOrUpdateData =
+        event.currentState.createOrUpdateData!;
     final List<PurchaseOrderTransaction> newTransactions =
         createOrUpdateData.transactions.indexed
             .where((entry) => entry.$1 != event.removeIndex)
@@ -81,5 +87,25 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     createOrUpdateData.transactions = newTransactions;
 
     emit(event.currentState.copyWith(createOrUpdateData: createOrUpdateData));
+  }
+
+  Future<void> _onCreate(
+    PurchaseOrderCreateEvent event,
+    Emitter<PurchaseOrderState> emit,
+  ) async {
+    emit(PurchaseOrderLoadingState());
+
+    CommonLoader.show();
+    final BaseResponse<String> response = await PurchaseOrderService.create(
+      event.currentState.createOrUpdateData!,
+    );
+    CommonLoader.hide();
+
+    if (response.success) {
+      Dialogutil.showAlertDiaglog('ดำเนินการสำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+      emit(event.currentState);
+    } else {
+      Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
+    }
   }
 }

@@ -23,3 +23,10 @@ class PurchaseOrderRemoveTransaction extends PurchaseOrderEvent {
   
   PurchaseOrderRemoveTransaction({required this.removeIndex, required this.currentState});
 }
+
+
+class PurchaseOrderCreateEvent extends PurchaseOrderEvent {
+  final PurchaseOrderDataState currentState;
+
+  PurchaseOrderCreateEvent({required this.currentState});
+}
