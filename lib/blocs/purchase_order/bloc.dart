@@ -37,7 +37,7 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     emit(
       PurchaseOrderDataState(
         items: [],
-        createData: PurchaseOrder(
+        createOrUpdateData: PurchaseOrder(
           docNo: 'PO-XXXXXXXX',
           status: 1,
           dueDate: '20301231',
@@ -48,6 +48,7 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
           remark: '',
           tagCode: '',
         ),
+        isEdit: false,
       ),
     );
     CommonLoader.hide();
@@ -57,28 +58,28 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
     PurchaseOrderAddTransactionEvent event,
     Emitter<PurchaseOrderState> emit,
   ) async {
-    final PurchaseOrder currentCreateData = event.currentState.createData!;
+    final PurchaseOrder currentCreateData = event.currentState.createOrUpdateData!;
     currentCreateData.transactions = [
       ...currentCreateData.transactions,
       _buildDraftTransaction(),
     ];
 
-    emit(event.currentState.copyWith(createData: currentCreateData));
+    emit(event.currentState.copyWith(createOrUpdateData: currentCreateData));
   }
 
   Future<void> _onRemoveTransaction(
     PurchaseOrderRemoveTransaction event,
     Emitter<PurchaseOrderState> emit,
   ) async {
-    final PurchaseOrder createData = event.currentState.createData!;
+    final PurchaseOrder createOrUpdateData = event.currentState.createOrUpdateData!;
     final List<PurchaseOrderTransaction> newTransactions =
-        createData.transactions.indexed
+        createOrUpdateData.transactions.indexed
             .where((entry) => entry.$1 != event.removeIndex)
             .map((item) => item.$2)
             .toList();
 
-    createData.transactions = newTransactions;
+    createOrUpdateData.transactions = newTransactions;
 
-    emit(event.currentState.copyWith(createData: createData));
+    emit(event.currentState.copyWith(createOrUpdateData: createOrUpdateData));
   }
 }

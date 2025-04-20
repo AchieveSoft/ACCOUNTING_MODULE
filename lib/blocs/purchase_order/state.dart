@@ -8,15 +8,22 @@ class PurchaseOrderLoadingState extends PurchaseOrderState {}
 
 class PurchaseOrderDataState extends PurchaseOrderState {
   final List<PurchaseOrder> items;
-  final PurchaseOrder? createData;
+  final PurchaseOrder? createOrUpdateData;
+  final bool isEdit;
 
-  PurchaseOrderDataState({required this.items, required this.createData});
+  PurchaseOrderDataState({
+    required this.items,
+    required this.createOrUpdateData,
+    required this.isEdit,
+  });
 
   PurchaseOrderDataState copyWith({
     List<PurchaseOrder>? items,
-    PurchaseOrder? createData,
+    PurchaseOrder? createOrUpdateData,
+    bool? isEdit,
   }) => PurchaseOrderDataState(
     items: items ?? this.items,
-    createData: createData ?? this.createData,
+    createOrUpdateData: createOrUpdateData ?? this.createOrUpdateData,
+    isEdit: isEdit ?? this.isEdit,
   );
 }

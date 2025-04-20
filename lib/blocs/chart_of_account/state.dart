@@ -59,14 +59,14 @@ class ChartOfAccountDataState extends ChartOfAccountState {
   final List<ChartOfAccount> allItems;
   final List<AccountingCategory> categoryItems;
   final ChartOfAccountItemSelected? currentItemSelect;
-  ChartOfAccountCreateData? createData = ChartOfAccountCreateData();
+  ChartOfAccountCreateData? createOrUpdateData = ChartOfAccountCreateData();
 
   ChartOfAccountDataState({
     this.searchKeyword,
     required this.allItems,
     required this.categoryItems,
     this.currentItemSelect,
-    this.createData,
+    this.createOrUpdateData,
   });
 
   ChartOfAccountDataState copyWith({
@@ -74,12 +74,12 @@ class ChartOfAccountDataState extends ChartOfAccountState {
     List<ChartOfAccount>? allItems,
     List<AccountingCategory>? categoryItems,
     ChartOfAccountItemSelected? currentItemSelect,
-    ChartOfAccountCreateData? createData,
+    ChartOfAccountCreateData? createOrUpdateData,
   }) => ChartOfAccountDataState(
     searchKeyword: searchKeyword ?? this.searchKeyword,
     allItems: allItems ?? this.allItems,
     categoryItems: categoryItems ?? this.categoryItems,
     currentItemSelect: currentItemSelect ?? this.currentItemSelect,
-    createData: createData ?? this.createData,
+    createOrUpdateData: createOrUpdateData ?? this.createOrUpdateData,
   );
 }

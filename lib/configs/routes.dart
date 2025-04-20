@@ -10,7 +10,7 @@ class RoutePaths {
   static String home = '$baseRoutePath/home';
   static String chartOfAccount = '$baseRoutePath/chart-of-account';
   static String unitMaster = '$baseRoutePath/master/unit';
-  static String purchaseOrder = '$baseRoutePath/expense/create-po';
+  static String purchaseOrder = '$baseRoutePath/expense/purchase-order';
 }
 
 class RouteConfifg {

@@ -136,13 +136,13 @@ class ChartOfAccountBloc
     emit(ChartOfAccountLoadingState());
     await ChartOfAccountService.create(
       ChartOfAccountRequest(
-        accountCode: event.currentState.createData!.accountCode,
+        accountCode: event.currentState.createOrUpdateData!.accountCode,
 
-        accountName: event.currentState.createData!.accountName,
-        accountNameEn: event.currentState.createData!.accountNameEn,
-        description: event.currentState.createData!.description,
-        descriptionEn: event.currentState.createData!.descriptionEn,
-        parentAccountCode: event.currentState.createData!.parentAccountCode,
+        accountName: event.currentState.createOrUpdateData!.accountName,
+        accountNameEn: event.currentState.createOrUpdateData!.accountNameEn,
+        description: event.currentState.createOrUpdateData!.description,
+        descriptionEn: event.currentState.createOrUpdateData!.descriptionEn,
+        parentAccountCode: event.currentState.createOrUpdateData!.parentAccountCode,
       ).toJson(),
     );
     emit(event.currentState);

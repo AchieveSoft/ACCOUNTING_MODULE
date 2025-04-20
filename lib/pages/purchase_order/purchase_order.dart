@@ -218,7 +218,7 @@ class PurchaseOrderPage extends StatelessWidget {
                                     controller:
                                         TextEditingController()
                                           ..text =
-                                              state.createData?.docNo ?? '',
+                                              state.createOrUpdateData?.docNo ?? '',
                                     onChanged: (value) {},
                                   ),
                                 ),
@@ -250,7 +250,7 @@ class PurchaseOrderPage extends StatelessWidget {
                                           ),
                                         ),
                                         value:
-                                            state.createData?.contractCode ??
+                                            state.createOrUpdateData?.contractCode ??
                                             '',
                                         items: [
                                           DropdownMenuItem(
@@ -283,7 +283,7 @@ class PurchaseOrderPage extends StatelessWidget {
                                     controller:
                                         _duedateTextFieldController
                                           ..text =
-                                              state.createData?.dueDate ?? '',
+                                              state.createOrUpdateData?.dueDate ?? '',
                                     readOnly: true,
                                     onTap: () {
                                       final DateTime now = DateTime.now();
@@ -296,10 +296,10 @@ class PurchaseOrderPage extends StatelessWidget {
                                         if (value == null) {
                                           return;
                                         }
-                                        state.createData!.dueDate =
+                                        state.createOrUpdateData!.dueDate =
                                             value.toString().split(' ')[0];
                                         _duedateTextFieldController.text =
-                                            state.createData!.dueDate;
+                                            state.createOrUpdateData!.dueDate;
                                       });
                                     },
                                   ),
@@ -378,7 +378,7 @@ class PurchaseOrderPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            ...state.createData!.transactions.indexed.map(
+                            ...state.createOrUpdateData!.transactions.indexed.map(
                               (entry) =>
                                   _buildTransactionRow(entry.$2, entry.$1),
                             ),

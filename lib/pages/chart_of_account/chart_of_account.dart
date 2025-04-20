@@ -54,7 +54,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: ChartOfAccountCreateData()
+                                      createOrUpdateData: ChartOfAccountCreateData()
                                           .updateWith(mainAccountCode: value),
                                     ),
                                   ),
@@ -70,7 +70,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                       .where(
                                         (item) =>
                                             item.parentCode ==
-                                            state.createData?.mainAccountCode,
+                                            state.createOrUpdateData?.mainAccountCode,
                                       )
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -86,7 +86,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(parentAccountCode: value),
                                     ),
                                   ),
@@ -105,7 +105,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(accountCode: value),
                                     ),
                                   ),
@@ -123,7 +123,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(accountName: value),
                                     ),
                                   ),
@@ -141,7 +141,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(accountNameEn: value),
                                     ),
                                   ),
@@ -159,7 +159,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(description: value),
                                     ),
                                   ),
@@ -177,7 +177,7 @@ class _AddNewAccountPopup extends StatelessWidget {
                                 context.readChartOfAccountBloc().add(
                                   ChartOfAccountUpdateDataEvent(
                                     newData: currentState.copyWith(
-                                      createData: currentState.createData!
+                                      createOrUpdateData: currentState.createOrUpdateData!
                                           .updateWith(descriptionEn: value),
                                     ),
                                   ),
