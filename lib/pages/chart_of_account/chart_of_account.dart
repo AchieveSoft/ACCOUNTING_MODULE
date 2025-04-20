@@ -3,7 +3,6 @@ import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
-import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
