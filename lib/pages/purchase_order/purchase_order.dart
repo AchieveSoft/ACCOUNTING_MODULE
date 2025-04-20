@@ -12,7 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PurchaseOrderPage extends StatelessWidget {
-  const PurchaseOrderPage({super.key});
+  final TextEditingController _duedateTextFieldController = TextEditingController();
+
+  PurchaseOrderPage({super.key});
 
   Widget _buildTransactionRow(PurchaseOrderTransaction data, int index) => Row(
     mainAxisSize: MainAxisSize.max,
@@ -35,7 +37,9 @@ class PurchaseOrderPage extends StatelessWidget {
             ),
             DataColumn(
               label: SizedBox(
-                width: MediaQueryUtil.getScreenWidthPercent(index != 0 ? 10.9 : 8,),
+                width: MediaQueryUtil.getScreenWidthPercent(
+                  index != 0 ? 10.9 : 8,
+                ),
                 child: Text('บัญชี', overflow: TextOverflow.ellipsis),
               ),
             ),
@@ -130,7 +134,7 @@ class PurchaseOrderPage extends StatelessWidget {
                   TextField(
                     decoration: inputDecorationBorderNone,
                     controller: TextEditingController()..text = '0.00',
-                    onChanged: (value) {}
+                    onChanged: (value) {},
                   ),
                 ),
                 DataCell(
@@ -268,22 +272,36 @@ class PurchaseOrderPage extends StatelessWidget {
                                 ),
                                 SizedBox(
                                   width: 200,
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: TextField(
-                                      decoration: buildCommonInputDecoration(
-                                        label: buildNormalRequiredText(
-                                          'วันที่ออก',
-                                        ),
-                                        isDense: true,
-                                        suffixIcon: Icon(Icons.calendar_today),
+                                  child: TextField(
+                                    decoration: buildCommonInputDecoration(
+                                      label: buildNormalRequiredText(
+                                        'วันที่ออก',
                                       ),
-                                      controller:
-                                          TextEditingController()
-                                            ..text =
-                                                state.createData?.dueDate ?? '',
-                                      readOnly: true,
+                                      isDense: true,
+                                      suffixIcon: Icon(Icons.calendar_today),
                                     ),
+                                    controller:
+                                        _duedateTextFieldController
+                                          ..text =
+                                              state.createData?.dueDate ?? '',
+                                    readOnly: true,
+                                    onTap: () {
+                                      final DateTime now = DateTime.now();
+
+                                      showDatePicker(
+                                        context: context,
+                                        firstDate: now,
+                                        lastDate: DateTime(now.year + 30),
+                                      ).then((value) {
+                                        if (value == null) {
+                                          return;
+                                        }
+                                        state.createData!.dueDate =
+                                            value.toString().split(' ')[0];
+                                        _duedateTextFieldController.text =
+                                            state.createData!.dueDate;
+                                      });
+                                    },
                                   ),
                                 ),
                               ],

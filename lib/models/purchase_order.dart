@@ -64,7 +64,7 @@ class PurchaseOrderTransaction {
 class PurchaseOrder {
   final String docNo;
   final int status;
-  final String dueDate;
+  String dueDate;
   final String docReferrence;
   final String contractCode;
   final int taxStatus;
