@@ -15,6 +15,7 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
   PurchaseOrderTransaction _buildDraftTransaction() => PurchaseOrderTransaction(
     productOrServiceCode: '',
     currentProductOrServiceName: '',
+    currentAccountCode: '',
     qty: 1,
     currentUnitName: '',
     currentUnitNameEn: '',

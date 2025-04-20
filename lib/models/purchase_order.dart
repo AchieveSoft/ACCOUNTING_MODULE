@@ -1,6 +1,7 @@
 class PurchaseOrderTransaction {
   final String productOrServiceCode;
   final String currentProductOrServiceName;
+  String currentAccountCode;
   int qty;
   final String currentUnitName;
   final String currentUnitNameEn;
@@ -15,6 +16,7 @@ class PurchaseOrderTransaction {
   PurchaseOrderTransaction({
     required this.productOrServiceCode,
     required this.currentProductOrServiceName,
+    required this.currentAccountCode,
     required this.qty,
     required this.currentUnitName,
     required this.currentUnitNameEn,
@@ -32,6 +34,7 @@ class PurchaseOrderTransaction {
         productOrServiceCode: json['productOrServiceCode'] ?? '',
         currentProductOrServiceName: json['currentProductOrServiceName'] ?? '',
         qty: json['qty'] ?? 0,
+        currentAccountCode: json['currentAccountCode'] ?? '',
         currentUnitName: json['currentUnitName'] ?? '',
         currentUnitNameEn: json['currentUnitNameEn'] ?? '',
         currentUnitPrice: json['currentUnitPrice'] ?? 0,
@@ -47,6 +50,7 @@ class PurchaseOrderTransaction {
     'productOrServiceCode': productOrServiceCode,
     'currentProductOrServiceName': currentProductOrServiceName,
     'qty': qty,
+    'currentAccountCode': currentAccountCode,
     'currentUnitName': currentUnitName,
     'currentUnitNameEn': currentUnitNameEn,
     'currentUnitPrice': currentUnitPrice,
