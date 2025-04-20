@@ -4,7 +4,6 @@ import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/extensions/unit_master.dart';
 import 'package:accounting_module/models/unit_master.dart';
-import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';

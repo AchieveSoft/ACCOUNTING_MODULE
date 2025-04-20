@@ -1,10 +1,10 @@
 class PurchaseOrderTransaction {
   final String productOrServiceCode;
   final String currentProductOrServiceName;
-  final int qty;
+  int qty;
   final String currentUnitName;
   final String currentUnitNameEn;
-  final double currentUnitPrice;
+  double currentUnitPrice;
   final int vatPercent;
   final double discountTotal;
   final double preVatTotal;
@@ -64,7 +64,7 @@ class PurchaseOrder {
   final String docReferrence;
   final String contractCode;
   final int taxStatus;
-  final List<PurchaseOrderTransaction> transactions;
+  List<PurchaseOrderTransaction> transactions;
   final String remark;
   final String tagCode;
 
