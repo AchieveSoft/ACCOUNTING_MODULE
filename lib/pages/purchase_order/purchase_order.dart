@@ -35,7 +35,7 @@ class PurchaseOrderPage extends StatelessWidget {
             ),
             DataColumn(
               label: SizedBox(
-                width: MediaQueryUtil.getScreenWidthPercent(8),
+                width: MediaQueryUtil.getScreenWidthPercent(index != 0 ? 10.9 : 8,),
                 child: Text('บัญชี', overflow: TextOverflow.ellipsis),
               ),
             ),
@@ -130,7 +130,7 @@ class PurchaseOrderPage extends StatelessWidget {
                   TextField(
                     decoration: inputDecorationBorderNone,
                     controller: TextEditingController()..text = '0.00',
-                    onChanged: (value) {},
+                    onChanged: (value) {}
                   ),
                 ),
                 DataCell(
