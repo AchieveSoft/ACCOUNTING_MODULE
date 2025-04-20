@@ -4,6 +4,7 @@ import 'package:accounting_module/models/chat_of_account.dart';
 import 'package:accounting_module/models/requests/chart_of_account.dart';
 import 'package:accounting_module/models/responses/chart_of_account.dart';
 import 'package:accounting_module/services/chart_of_account.dart';
+import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'event.dart';
@@ -67,6 +68,7 @@ class ChartOfAccountBloc
     String? searchKeyword,
   }) async {
     emit(ChartOfAccountLoadingState());
+    CommonLoader.show();
 
     final List<ChartOfAccountResponseData> response =
         searchKeyword?.isNotEmpty == true
@@ -94,6 +96,8 @@ class ChartOfAccountBloc
     if (firstSelect != null) {
       _setItemFromSelectedItem(currentState, firstSelect.referenceCode, emit);
     }
+
+    CommonLoader.hide();
   }
 
   Future<void> _onGetData(

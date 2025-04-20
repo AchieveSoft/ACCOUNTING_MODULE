@@ -5,5 +5,5 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) => CommonScaffold(child: Text(''));
+  Widget build(BuildContext context) => CommonScaffold(child: Center(child: Text('ฟังชั่นนี้อยู่ระหว่างการพัฒนาจะเปิดให้ใช้งานเร็วๆนี้')));
 }

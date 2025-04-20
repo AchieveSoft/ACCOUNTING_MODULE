@@ -3,6 +3,7 @@ import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/models/accounting_category.dart';
 import 'package:accounting_module/models/chat_of_account.dart';
+import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
@@ -334,260 +335,270 @@ class ChartOfAccountPage extends StatelessWidget {
     ),
   );
 
+  Widget _buildBody(BuildContext context) => Padding(
+    padding: EdgeInsets.all(16),
+    child: Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Text(
+                'ผังบัญชี',
+                style: TextStyle(
+                  color: Color(0XFF3b3c66),
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => _AddNewAccountPopup(),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                      ),
+                      label: Text(
+                        'เพิ่มบัญชี',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: Icon(Icons.add, color: Colors.white),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Dialogutil.showAlertDiaglog(
+                          "โปรดรอ",
+                          "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                      ),
+                      label: Text(
+                        'เพิ่มธนาคาร และอื่นๆ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: Icon(Icons.add, color: Colors.white),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Dialogutil.showAlertDiaglog(
+                          "โปรดรอ",
+                          "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      label: Text(
+                        'พิมพ์รายงาน',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: Icon(Icons.print, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      width: 350,
+                      child: Card(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'รายการบัญชี',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: TextField(
+                                decoration: buildCommonInputDecoration(
+                                  labelText: 'ค้นหารายการ',
+                                  suffixIcon: Icon(Icons.search),
+                                ),
+                                onSubmitted: (value) {
+                                  if (value.isNotEmpty) {
+                                    context.readChartOfAccountBloc().add(
+                                      ChartOfAccountSearchEvent(value),
+                                    );
+                                  } else {
+                                    context.readChartOfAccountBloc().add(
+                                      ChartOfAccountGetDataEvent(),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 24),
+                            BlocBuilder<
+                              ChartOfAccountBloc,
+                              ChartOfAccountState
+                            >(
+                              builder: (context, state) {
+                                if (state is ChartOfAccountDataState) {
+                                  return Expanded(
+                                    child: ListView.builder(
+                                      itemCount: state.categoryItems.length,
+                                      itemBuilder:
+                                          (context, index) =>
+                                              _buildAccountingCategory(
+                                                state.categoryItems[index],
+                                              ),
+                                    ),
+                                  );
+                                } else {
+                                  return SizedBox.shrink();
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              BlocBuilder<ChartOfAccountBloc, ChartOfAccountState>(
+                builder: (context, state) {
+                  if (state is ChartOfAccountDataState) {
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Card(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            state
+                                                    .currentItemSelect
+                                                    ?.accountName ??
+                                                '-',
+                                            style: TextStyle(
+                                              color: Color(0XFF3b3c66),
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Divider(),
+                                      Column(
+                                        children:
+                                            state.currentItemSelect != null
+                                                ? [
+                                                  _buildInfoText(
+                                                    'ผังบัญชีหลัก :',
+                                                    state
+                                                            .currentItemSelect
+                                                            ?.mainAccountName ??
+                                                        '-',
+                                                  ),
+                                                  _buildInfoText(
+                                                    'ผังบัญชีรอง :',
+                                                    state
+                                                            .currentItemSelect
+                                                            ?.subAccountName ??
+                                                        '-',
+                                                  ),
+                                                  _buildInfoText(
+                                                    'บัญชีย่อย :',
+                                                    state
+                                                            .currentItemSelect
+                                                            ?.accountName ??
+                                                        '-',
+                                                  ),
+                                                  _buildInfoText(
+                                                    'อัตราภาษีหัก ณ ที่จ่าย :',
+                                                    'อัตโนมัติ',
+                                                  ),
+                                                  _buildInfoText(
+                                                    'ประเภทเงินได้ภาษี :',
+                                                    'ไม่ระบุ',
+                                                  ),
+                                                  _buildInfoText(
+                                                    'คำอธิบาย :',
+                                                    state
+                                                            .currentItemSelect
+                                                            ?.accountDescription ??
+                                                        '-',
+                                                  ),
+                                                ]
+                                                : [],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     context.readChartOfAccountBloc().add(ChartOfAccountGetDataEvent());
 
     return CommonScaffold(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  Text(
-                    'ผังบัญชี',
-                    style: TextStyle(
-                      color: Color(0XFF3b3c66),
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => _AddNewAccountPopup(),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                          ),
-                          label: Text(
-                            'เพิ่มบัญชี',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          icon: Icon(Icons.add, color: Colors.white),
-                        ),
-                        SizedBox(width: 16),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Dialogutil.showAlertDiaglog(
-                              "โปรดรอ",
-                              "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purpleAccent,
-                          ),
-                          label: Text(
-                            'เพิ่มธนาคาร และอื่นๆ',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          icon: Icon(Icons.add, color: Colors.white),
-                        ),
-                        SizedBox(width: 16),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Dialogutil.showAlertDiaglog(
-                              "โปรดรอ",
-                              "ฟีเจอร์นี้กำลังอยู่ในระหว่างการพัฒนา",
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          label: Text(
-                            'พิมพ์รายงาน',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          icon: Icon(Icons.print, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: 350,
-                          child: Card(
-                            color: Colors.white,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'รายการบัญชี',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: TextField(
-                                    decoration: buildCommonInputDecoration(
-                                      labelText: 'ค้นหารายการ',
-                                      suffixIcon: Icon(Icons.search),
-                                    ),
-                                    onSubmitted: (value) {
-                                      if (value.isNotEmpty) {
-                                        context.readChartOfAccountBloc().add(
-                                          ChartOfAccountSearchEvent(value),
-                                        );
-                                      } else {
-                                        context.readChartOfAccountBloc().add(
-                                          ChartOfAccountGetDataEvent(),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 24),
-                                BlocBuilder<
-                                  ChartOfAccountBloc,
-                                  ChartOfAccountState
-                                >(
-                                  builder: (context, state) {
-                                    if (state is ChartOfAccountDataState) {
-                                      return Expanded(
-                                        child: ListView.builder(
-                                          itemCount: state.categoryItems.length,
-                                          itemBuilder:
-                                              (context, index) =>
-                                                  _buildAccountingCategory(
-                                                    state.categoryItems[index],
-                                                  ),
-                                        ),
-                                      );
-                                    } else {
-                                      return SizedBox.shrink();
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  BlocBuilder<ChartOfAccountBloc, ChartOfAccountState>(
-                    builder: (context, state) {
-                      if (state is ChartOfAccountDataState) {
-                        return Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(16),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Text(
-                                                state
-                                                        .currentItemSelect
-                                                        ?.accountName ??
-                                                    '-',
-                                                style: TextStyle(
-                                                  color: Color(0XFF3b3c66),
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(),
-                                          Column(
-                                            children:
-                                                state.currentItemSelect != null
-                                                    ? [
-                                                      _buildInfoText(
-                                                        'ผังบัญชีหลัก :',
-                                                        state
-                                                                .currentItemSelect
-                                                                ?.mainAccountName ??
-                                                            '-',
-                                                      ),
-                                                      _buildInfoText(
-                                                        'ผังบัญชีรอง :',
-                                                        state
-                                                                .currentItemSelect
-                                                                ?.subAccountName ??
-                                                            '-',
-                                                      ),
-                                                      _buildInfoText(
-                                                        'บัญชีย่อย :',
-                                                        state
-                                                                .currentItemSelect
-                                                                ?.accountName ??
-                                                            '-',
-                                                      ),
-                                                      _buildInfoText(
-                                                        'อัตราภาษีหัก ณ ที่จ่าย :',
-                                                        'อัตโนมัติ',
-                                                      ),
-                                                      _buildInfoText(
-                                                        'ประเภทเงินได้ภาษี :',
-                                                        'ไม่ระบุ',
-                                                      ),
-                                                      _buildInfoText(
-                                                        'คำอธิบาย :',
-                                                        state
-                                                                .currentItemSelect
-                                                                ?.accountDescription ??
-                                                            '-',
-                                                      ),
-                                                    ]
-                                                    : [],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: BlocBuilder<ChartOfAccountBloc, ChartOfAccountState>(
+       builder: (context, state) {
+          if (state is ChartOfAccountDataState) {
+            return _buildBody(context);
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
     );
   }

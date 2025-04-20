@@ -12,6 +12,6 @@ class AccountingApp extends StatelessWidget {
     navigatorKey: GlobalKeepings.navigator,
     [AccountingModule()],
     'Accounting',
-    RoutePaths.chartOfAccount,
+    RoutePaths.home,
   );
 }

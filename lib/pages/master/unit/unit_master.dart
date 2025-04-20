@@ -4,6 +4,7 @@ import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/extensions/unit_master.dart';
 import 'package:accounting_module/models/unit_master.dart';
+import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
@@ -151,97 +152,103 @@ class UnitMasterPage extends StatelessWidget {
     );
   }
 
+  Widget _buildBody(BuildContext context) => Padding(
+    padding: EdgeInsets.all(16),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'หน่วย',
+              style: TextStyle(
+                color: Color(0XFF3b3c66),
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => _showAddOrEditDialog(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
+              icon: Icon(Icons.add, color: Colors.white),
+              label: Text(
+                'เพิ่มหน่วยใหม่',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        BlocBuilder<UnitMasterBloc, UnitMasterState>(
+          builder: (context, state) {
+            if (state is UnitMasterDataState) {
+              return Expanded(
+                child: PaginatedDataTable2(
+                  rowsPerPage: 15,
+                  dataRowHeight: 46,
+                  border: TableBorder(
+                    left: BorderSide(color: Color(0XFFecf0f1)),
+                    right: BorderSide(color: Color(0XFFecf0f1)),
+                    top: BorderSide(color: Color(0XFFecf0f1)),
+                    bottom: BorderSide(color: Color(0XFFecf0f1)),
+                  ),
+                  headingRowColor: WidgetStateColor.resolveWith(
+                    (_) => Constants.primaryColor1,
+                  ),
+                  headingRowDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                  ),
+                  dividerThickness: 0,
+
+                  columns:
+                      _tableCols
+                          .map(
+                            (col) => DataColumn2(
+                              label: Text(
+                                col,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                  source: UnitMasterDataSource(
+                    items: state.items,
+                    onEdit: (value) {
+                      _showAddOrEditDialog(context, isEdit: true, data: value);
+                    },
+                  ),
+                ),
+              );
+            } else {
+              return SizedBox(
+                height: MediaQueryUtil.getScreenHeightPercent(70),
+              );
+            }
+          },
+        ),
+        // SizedBox(height: MediaQueryUtil.getScreenHeightPercent(5)),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     context.readUnitMasterBloc().add(UnitMasterGetDataEvent());
 
     return CommonScaffold(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'หน่วย',
-                  style: TextStyle(
-                    color: Color(0XFF3b3c66),
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => _showAddOrEditDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                  ),
-                  icon: Icon(Icons.add, color: Colors.white),
-                  label: Text(
-                    'เพิ่มหน่วยใหม่',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-            BlocBuilder<UnitMasterBloc, UnitMasterState>(
-              builder: (context, state) {
-                if (state is UnitMasterDataState) {
-                  return Expanded(
-                    child: PaginatedDataTable2(
-                      rowsPerPage: 15,
-                      dataRowHeight: 46,
-                      border: TableBorder(
-                        left: BorderSide(color: Color(0XFFecf0f1)),
-                        right: BorderSide(color: Color(0XFFecf0f1)),
-                        top: BorderSide(color: Color(0XFFecf0f1)),
-                        bottom: BorderSide(color: Color(0XFFecf0f1)),
-                      ),
-                      headingRowColor: WidgetStateColor.resolveWith(
-                        (_) => Constants.primaryColor1,
-                      ),
-                      headingRowDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-                      ),
-                      dividerThickness: 0,
-
-                      columns:
-                          _tableCols
-                              .map(
-                                (col) => DataColumn2(
-                                  label: Text(
-                                    col,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                      source: UnitMasterDataSource(
-                        items: state.items,
-                        onEdit: (value) {
-                          _showAddOrEditDialog(
-                            context,
-                            isEdit: true,
-                            data: value,
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                } else {
-                  return SizedBox(
-                    height: MediaQueryUtil.getScreenHeightPercent(70),
-                  );
-                }
-              },
-            ),
-            // SizedBox(height: MediaQueryUtil.getScreenHeightPercent(5)),
-          ],
-        ),
+      child: BlocBuilder<UnitMasterBloc, UnitMasterState>(
+        builder: (context, state) {
+          if (state is UnitMasterDataState) {
+            return _buildBody(context);
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
     );
   }

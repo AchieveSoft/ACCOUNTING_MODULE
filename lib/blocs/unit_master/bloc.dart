@@ -2,6 +2,7 @@ import 'package:accounting_module/models/requests/unit_master.dart';
 import 'package:accounting_module/models/responses/base_response.dart';
 import 'package:accounting_module/models/unit_master.dart';
 import 'package:accounting_module/services/unit_master.dart';
+import 'package:accounting_module/shared/widgets/common_loader.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +18,12 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
 
   Future<void> _getData(Emitter<UnitMasterState> emit) async {
     emit(UnitMasterLoadingState());
+    CommonLoader.show();
+
     final items = await UnitMasterService.getData();
+    
     emit(UnitMasterDataState(items: items));
+    CommonLoader.hide();
   }
 
   Future<void> _onGetData(
@@ -32,6 +37,9 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
     UnitMasterCreateOrUpdateEvent event,
     Emitter<UnitMasterState> emit,
   ) async {
+    emit(UnitMasterLoadingState());
+    CommonLoader.show();
+
     final UnitMasterRequest reqData = UnitMasterRequest(
       unitCode: event.unitCode,
       unitName: event.unitName,
@@ -52,12 +60,17 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
     } else {
       Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
     }
+
+    CommonLoader.hide();
   }
 
   Future<void> _onDeleteUnit(
     UnitMasterDeleteEvent event,
     Emitter<UnitMasterState> emit,
   ) async {
+    emit(UnitMasterLoadingState());
+    CommonLoader.show();
+
     final BaseResponse response = await UnitMasterService.deleteUnit(
       event.unitCode,
     );
@@ -68,5 +81,7 @@ class UnitMasterBloc extends Bloc<UnitMasterEvent, UnitMasterState> {
     } else {
       Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
     }
+
+    CommonLoader.hide();
   }
 }
