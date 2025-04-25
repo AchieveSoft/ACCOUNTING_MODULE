@@ -182,7 +182,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
   final double _drawerWidth = 180;
 
   Widget _buildWindowsIcons() =>
-      !kIsWeb
+      ! Constants.isDesktopKioskMode
           ? Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.max,
