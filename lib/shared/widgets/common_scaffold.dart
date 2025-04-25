@@ -208,6 +208,39 @@ class _CommonScaffoldState extends State<CommonScaffold> {
           )
           : SizedBox.shrink();
 
+  Widget _appBarIconWrap({required Widget icon, Function? onClick}) => Padding(
+    padding: EdgeInsets.only(right: 8),
+    child: InkWell(
+      onTap: () {
+        onClick?.call();
+      },
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: icon,
+      ),
+    ),
+  );
+
+  Widget _buildAppbarOptions() => Expanded(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        _appBarIconWrap(icon: Icon(Icons.grid_4x4)),
+        _appBarIconWrap(icon: Icon(Icons.notifications)),
+        _appBarIconWrap(icon: Icon(Icons.chat_rounded)),
+        _appBarIconWrap(icon: Icon(Icons.person_3)),
+        MediaQueryUtil.isDesktopScreen && !Constants.isDesktopKioskMode
+            ? SizedBox(width: _drawerWidth - 16)
+            : SizedBox.shrink(),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -231,6 +264,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
                     'Solution Leader Accounting',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
+                  _buildAppbarOptions(),
                   _buildWindowsIcons(),
                 ],
               ),
