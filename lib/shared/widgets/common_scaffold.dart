@@ -6,7 +6,6 @@ import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:accounting_module/utils/media_query.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:accounting_module/configs/drawer_items.dart';
 import 'package:accounting_module/models/drawer_item.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
