@@ -274,42 +274,93 @@ class QuotationManagePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    decoration: buildCommonInputDecoration(
-                                      label: buildNormalRequiredText(
-                                        'วันที่ออก',
-                                      ),
-                                      isDense: true,
-                                      suffixIcon: Icon(Icons.calendar_today),
-                                    ),
-                                    controller:
-                                        _duedateTextFieldController
-                                          ..text =
-                                              state
-                                                  .createOrUpdateData
-                                                  ?.dueDate ??
-                                              '',
-                                    readOnly: true,
-                                    onTap: () {
-                                      final DateTime now = DateTime.now();
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        decoration: buildCommonInputDecoration(
+                                          label: buildNormalRequiredText(
+                                            'วันที่ออก',
+                                          ),
+                                          isDense: true,
+                                          suffixIcon: Icon(
+                                            Icons.calendar_today,
+                                          ),
+                                        ),
+                                        controller:
+                                            _duedateTextFieldController
+                                              ..text =
+                                                  state
+                                                      .createOrUpdateData
+                                                      ?.dueDate ??
+                                                  '',
+                                        readOnly: true,
+                                        onTap: () {
+                                          final DateTime now = DateTime.now();
 
-                                      showDatePicker(
-                                        context: context,
-                                        firstDate: now,
-                                        lastDate: DateTime(now.year + 30),
-                                      ).then((value) {
-                                        if (value == null) {
-                                          return;
-                                        }
-                                        state.createOrUpdateData!.dueDate =
-                                            value.toString().split(' ')[0];
-                                        _duedateTextFieldController.text =
-                                            state.createOrUpdateData!.dueDate;
-                                      });
-                                    },
-                                  ),
+                                          showDatePicker(
+                                            context: context,
+                                            firstDate: now,
+                                            lastDate: DateTime(now.year + 30),
+                                          ).then((value) {
+                                            if (value == null) {
+                                              return;
+                                            }
+                                            state.createOrUpdateData!.dueDate =
+                                                value.toString().split(' ')[0];
+                                            _duedateTextFieldController.text =
+                                                state
+                                                    .createOrUpdateData!
+                                                    .dueDate;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 16),
+                                    SizedBox(
+                                      width: 200,
+                                      child: TextField(
+                                        decoration: buildCommonInputDecoration(
+                                          label: buildNormalRequiredText(
+                                            'วันที่ใช้ถึง',
+                                          ),
+                                          isDense: true,
+                                          suffixIcon: Icon(
+                                            Icons.calendar_today,
+                                          ),
+                                        ),
+                                        controller:
+                                            _duedateTextFieldController
+                                              ..text =
+                                                  state
+                                                      .createOrUpdateData
+                                                      ?.dueDate ??
+                                                  '',
+                                        readOnly: true,
+                                        onTap: () {
+                                          final DateTime now = DateTime.now();
+
+                                          showDatePicker(
+                                            context: context,
+                                            firstDate: now,
+                                            lastDate: DateTime(now.year + 30),
+                                          ).then((value) {
+                                            if (value == null) {
+                                              return;
+                                            }
+                                            state.createOrUpdateData!.dueDate =
+                                                value.toString().split(' ')[0];
+                                            _duedateTextFieldController.text =
+                                                state
+                                                    .createOrUpdateData!
+                                                    .dueDate;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -338,18 +389,10 @@ class QuotationManagePage extends StatelessWidget {
                                     items: [
                                       DropdownMenuItem(
                                         value: 1,
-                                        child: Text('แยกภาษี'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 2,
-                                        child: Text('รวมภาษี'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 3,
                                         child: Text('ไม่มี'),
                                       ),
                                     ],
-                                    onChanged: (value) {},
+                                    onChanged: null,
                                   ),
                                 ),
                                 SizedBox(width: 400),
