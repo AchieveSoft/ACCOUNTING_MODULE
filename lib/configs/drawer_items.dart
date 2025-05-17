@@ -16,7 +16,13 @@ class DrawerItemConfig {
       icon: Icons.attach_money,
       title: 'รายรับ',
       menuItem: [
-        MenuItem(title: 'ใบเสนอราคา', onTap: () {}),
+        MenuItem(
+          title: 'ใบเสนอราคา',
+          onTap:
+              () => Navigator.of(
+                GlobalKeepings.context,
+              ).pushNamed(RoutePaths.quotationList),
+        ),
         MenuItem(title: 'ใบแจ้งหนี้', onTap: () {}),
         MenuItem(title: 'ใบเสร็จรับเงิน', onTap: () {}),
       ],

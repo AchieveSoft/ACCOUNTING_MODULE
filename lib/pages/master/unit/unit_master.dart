@@ -203,7 +203,6 @@ class UnitMasterPage extends StatelessWidget {
                     ),
                   ),
                   dividerThickness: 0,
-
                   columns:
                       _tableCols
                           .map(

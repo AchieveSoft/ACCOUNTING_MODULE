@@ -21,6 +21,11 @@ class _IconButton extends StatelessWidget {
   );
 }
 
+class ViewIconButton extends _IconButton {
+  const ViewIconButton({required super.onPressed})
+    : super(icon: Icons.remove_red_eye, color: Colors.blueAccent);
+}
+
 class EditIconButton extends _IconButton {
   const EditIconButton({required super.onPressed})
     : super(icon: Icons.edit, color: Colors.greenAccent);

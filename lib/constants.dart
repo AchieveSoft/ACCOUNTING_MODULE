@@ -7,6 +7,6 @@ class Constants {
   static final Color primaryColor2 = Color(0XFFFF5E62);
   static final bool isDesktopKioskMode = false;
 
-  // static final Color primaryColor1 = Color(0XFFFF416C);
-  // static final Color primaryColor2 = Color(0XFFFF4B2B);
+  // static final Color primaryColor1 = Color(0XFF8E2DE2);
+  // static final Color primaryColor2 = Color(0XFF4A00E0);
 }
