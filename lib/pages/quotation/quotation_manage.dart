@@ -11,11 +11,11 @@ import 'package:accounting_module/utils/media_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class QuotationPage extends StatelessWidget {
+class QuotationManagePage extends StatelessWidget {
   final TextEditingController _duedateTextFieldController =
       TextEditingController();
 
-  QuotationPage({super.key});
+  QuotationManagePage({super.key});
 
   Widget _buildTransactionRow(PurchaseOrderTransaction data, int index) => Row(
     mainAxisSize: MainAxisSize.max,
