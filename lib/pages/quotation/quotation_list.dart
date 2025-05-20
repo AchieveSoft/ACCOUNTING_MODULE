@@ -1,5 +1,7 @@
+import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/texts.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -101,6 +103,7 @@ class QuotationListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.readQuotationBloc().add(QuotationGetItemEvent());
     return CommonScaffold(child: _buildBody(context));
   }
 }

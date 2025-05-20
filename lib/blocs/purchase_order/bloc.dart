@@ -42,7 +42,7 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
       PurchaseOrderDataState(
         items: [],
         createOrUpdateData: PurchaseOrder(
-          docNo: 'PO-XXXXXXXX',
+          docNo: 'QO-XXXXXXXX',
           status: 1,
           dueDate: '20301231',
           docReferrence: '',

@@ -582,7 +582,7 @@ class QuotationManagePage extends StatelessWidget {
                                   ),
                                   icon: Icon(Icons.check, color: Colors.white),
                                   label: Text(
-                                    'อนุมัติใบสั่งซื้อ',
+                                    'อนุมัติใบเสนอราคา',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),

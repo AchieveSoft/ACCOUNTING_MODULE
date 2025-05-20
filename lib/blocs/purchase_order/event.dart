@@ -1,6 +1,5 @@
 part of 'bloc.dart';
 
-
 abstract class PurchaseOrderEvent {}
 
 class PurchaseOrderGetDataEvent extends PurchaseOrderEvent {}
