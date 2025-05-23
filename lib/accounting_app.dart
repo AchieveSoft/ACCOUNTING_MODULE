@@ -11,7 +11,7 @@ class AccountingApp extends StatelessWidget {
   Widget build(BuildContext context) => ErpApp(
     navigatorKey: GlobalKeepings.navigator,
     [AccountingModule()],
-    'Accounting',
-    RoutePaths.home,
+    'Solution Leader - Accounting',
+    RoutePaths.quotationList,
   );
 }

@@ -4,6 +4,7 @@ import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/texts.dart';
+import 'package:accounting_module/utils/media_query.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class QuotationListPage extends StatelessWidget {
     padding: EdgeInsets.all(16),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +68,7 @@ class QuotationListPage extends StatelessWidget {
         Expanded(
           child: PaginatedDataTable2(
             showCheckboxColumn: false,
-            rowsPerPage: 15,
+            rowsPerPage: 10,
             dataRowHeight: 46,
             border: TableBorder(
               left: BorderSide(color: Color(0XFFecf0f1)),
@@ -97,6 +99,7 @@ class QuotationListPage extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(height: MediaQueryUtil.getScreenHeightPercent(25)),
       ],
     ),
   );

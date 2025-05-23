@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:accounting_module/blocs/common_scaffold/bloc.dart';
+import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:accounting_module/utils/media_query.dart';
@@ -176,99 +178,33 @@ class CommonScaffold extends StatefulWidget {
 }
 
 class _CommonScaffoldState extends State<CommonScaffold> {
-  final GlobalKey<SliderDrawerState> _sliderDrawerKey =
-      GlobalKey<SliderDrawerState>();
-  final double _drawerWidth = 180;
-
-  Widget _buildMenuItem(IconData icon, String text) => SizedBox(
-    width: 170,
-    height: 90,
-    child: Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 4,
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Color(0XFF1CBD9D)),
-            SizedBox(width: 8),
-            Text(text, style: TextStyle(color: Color(0XFF818181))),
-          ],
+  Widget _buildMenuItem(IconData icon, String text) => InkWell(
+    onTap: () {
+      Navigator.of(GlobalKeepings.context).pushNamed(RoutePaths.chartOfAccount);
+    },
+    child: SizedBox(
+      width: 170,
+      height: 90,
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 4,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: Color(0XFF1CBD9D)),
+              SizedBox(width: 8),
+              Text(text, style: TextStyle(color: Color(0XFF818181))),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-
-  Widget _buildWindowsIcons() =>
-      Constants.isDesktopKioskMode
-          ? Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () {
-                    Dialogutil.showConfirmDialog(
-                      title: 'ยืนยันการดำเนินการ',
-                      text: 'คุณต้องการปิดโปรแกรมใช่หรือไม่',
-                      onConfirm: () {
-                        exit(0);
-                      },
-                      onCancel: () {},
-                    );
-                  },
-                ),
-                MediaQueryUtil.isDesktopScreen == true
-                    ? SizedBox(width: _drawerWidth - 16)
-                    : SizedBox.shrink(),
-              ],
-            ),
-          )
-          : SizedBox.shrink();
-
-  Widget _appBarIconWrap({required Widget icon, Function? onClick}) => Padding(
-    padding: EdgeInsets.only(right: 8),
-    child: InkWell(
-      onTap: () {
-        onClick?.call();
-      },
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: icon,
-      ),
-    ),
-  );
-
-  Widget _buildAppbarOptions() => Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _appBarIconWrap(icon: Icon(Icons.grid_4x4)),
-        _appBarIconWrap(icon: Icon(Icons.notifications)),
-        _appBarIconWrap(icon: Icon(Icons.chat_rounded)),
-        _appBarIconWrap(icon: Icon(Icons.person_3)),
-        MediaQueryUtil.isDesktopScreen && !Constants.isDesktopKioskMode
-            ? SizedBox(width: _drawerWidth - 16)
-            : SizedBox.shrink(),
-      ],
     ),
   );
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (MediaQueryUtil.isDesktopScreen) {
-        _sliderDrawerKey.currentState?.openSlider();
-      }
-    });
-
     return Scaffold(
       body: Stack(
         children: [
@@ -285,7 +221,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
             top: 16,
             left: 34,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width - 64,
+              width: MediaQueryUtil.getScreenWidth() - 64,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,25 +292,49 @@ class _CommonScaffoldState extends State<CommonScaffold> {
             top: 130,
             left: 32,
             child: Container(
-              width: MediaQuery.of(context).size.width - 64,
+              width: MediaQueryUtil.getScreenWidth() - 64,
               color: Colors.transparent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildMenuItem(Icons.dashboard, 'Dashboard'),
-                  _buildMenuItem(Icons.attach_money, 'Revenue'),
-                  _buildMenuItem(Icons.money_off, 'Expenses'),
-                  _buildMenuItem(Icons.contacts, 'Contacts'),
-                  _buildMenuItem(Icons.inventory, 'Products'),
-                  _buildMenuItem(Icons.account_balance, 'Finances'),
-                  _buildMenuItem(Icons.account_box, 'Accounts'),
-                  _buildMenuItem(Icons.folder, 'File Vault'),
-                  _buildMenuItem(Icons.settings, 'Settings'),
-                ],
+                children:
+                    DrawerItemConfig.items
+                        .map((item) => _buildMenuItem(item.icon, item.title))
+                        .toList(),
               ),
             ),
           ),
-          Positioned(top: 300, left: 0, child: widget.child),
+          Positioned(
+            top: 232,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0XFFF9F9F9),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(32),
+                    topRight: Radius.circular(32),
+                  ),
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQueryUtil.getScreenHeight(),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: MediaQueryUtil.getScreenHeight(),
+                        child: widget.child,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

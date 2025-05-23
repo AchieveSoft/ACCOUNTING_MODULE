@@ -29,7 +29,7 @@ class DrawerItemConfig {
     ),
     DrawerItem(
       key: 'expenses',
-      icon: Icons.book_online,
+      icon: Icons.money_off,
       title: 'รายจ่าย',
       menuItem: [
         MenuItem(
@@ -41,6 +41,24 @@ class DrawerItemConfig {
         ),
         MenuItem(title: 'ใบจ่ายเงินมัดจำ', onTap: () {}),
       ],
+    ),
+    DrawerItem(
+      key: 'expenses',
+      icon: Icons.contacts,
+      title: 'ผู้ติดต่อ',
+      menuItem: [],
+    ),
+    DrawerItem(
+      key: 'expenses',
+      icon: Icons.inventory,
+      title: 'สินค้า/บริการ',
+      menuItem: [],
+    ),
+    DrawerItem(
+      key: 'expenses',
+      icon: Icons.account_balance,
+      title: 'การเงิน',
+      menuItem: [],
     ),
     DrawerItem(
       key: 'accounts',
@@ -57,21 +75,27 @@ class DrawerItemConfig {
         MenuItem(title: 'งบทดลอง', onTap: () {}),
       ],
     ),
+    // DrawerItem(
+    //   key: 'master',
+    //   icon: Icons.table_chart,
+    //   title: 'ข้อมูล',
+    //   menuItem: [
+    //     MenuItem(title: 'สินค้า/บริการ', onTap: () {}),
+    //     MenuItem(
+    //       title: 'หน่วย',
+    //       onTap:
+    //           () => Navigator.of(
+    //             GlobalKeepings.context,
+    //           ).pushNamed(RoutePaths.unitMaster),
+    //     ),
+    //     MenuItem(title: 'ผู้ติดต่อ', onTap: () {}),
+    //   ],
+    // ),
     DrawerItem(
-      key: 'master',
-      icon: Icons.table_chart,
-      title: 'ข้อมูล',
-      menuItem: [
-        MenuItem(title: 'สินค้า/บริการ', onTap: () {}),
-        MenuItem(
-          title: 'หน่วย',
-          onTap:
-              () => Navigator.of(
-                GlobalKeepings.context,
-              ).pushNamed(RoutePaths.unitMaster),
-        ),
-        MenuItem(title: 'ผู้ติดต่อ', onTap: () {}),
-      ],
+      key: 'expenses',
+      icon: Icons.folder,
+      title: 'คลังเอกสาร',
+      menuItem: [],
     ),
     DrawerItem(
       key: 'setting',
@@ -79,11 +103,11 @@ class DrawerItemConfig {
       title: 'ตั้งค่า',
       menuItem: [MenuItem(title: 'บัญชี', onTap: () {})],
     ),
-    DrawerItem(
-      key: 'logout',
-      icon: Icons.logout,
-      title: 'ออกจากระบบ',
-      menuItem: [],
-    ),
+    // DrawerItem(
+    //   key: 'logout',
+    //   icon: Icons.logout,
+    //   title: 'ออกจากระบบ',
+    //   menuItem: [],
+    // ),
   ];
 }
