@@ -304,7 +304,7 @@ class _CommonScaffoldState extends State<CommonScaffold> {
             ),
           ),
           Positioned(
-            top: 232,
+            top: 248,
             left: 0,
             right: 0,
             bottom: 0,
