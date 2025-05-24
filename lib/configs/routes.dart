@@ -1,5 +1,6 @@
 import 'package:accounting_module/pages/chart_of_account/chart_of_account.dart';
 import 'package:accounting_module/pages/master/unit/unit_master.dart';
+import 'package:accounting_module/pages/print/print_webview.dart';
 import 'package:accounting_module/pages/purchase_order/purchase_order.dart';
 import 'package:accounting_module/pages/quotation/quotation_manage.dart';
 import 'package:accounting_module/pages/quotation/quotation_list.dart';
@@ -15,6 +16,7 @@ class RoutePaths {
   static String purchaseOrder = '$baseRoutePath/expense/purchase-order';
   static String quotationList = '$baseRoutePath/revenue/quotation-list';
   static String quotationManage = '$baseRoutePath/revenue/quotation-manage';
+  static String printWebview = '$baseRoutePath/print-webview';
 }
 
 class RouteConfifg {
@@ -24,6 +26,7 @@ class RouteConfifg {
     RoutePaths.unitMaster: (context) => UnitMasterPage(),
     RoutePaths.purchaseOrder: (context) => PurchaseOrderPage(),
     RoutePaths.quotationList: (context) => QuotationListPage(),
-    RoutePaths.quotationManage: (context) => QuotationManagePage()
+    RoutePaths.quotationManage: (context) => QuotationManagePage(),
+    RoutePaths.printWebview: (context) => PrintWebview(),
   };
 }

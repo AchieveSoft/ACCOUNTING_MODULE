@@ -2,7 +2,9 @@ import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/extensions/build_context.dart';
+import 'package:accounting_module/shared/widgets/common_list_tab.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
+import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/shared/widgets/texts.dart';
 import 'package:accounting_module/utils/media_query.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -16,6 +18,15 @@ class QuotationListPage extends StatelessWidget {
     'ใช้ได้ถึง',
     'มูลค่าสุทธิ',
     'สถานะ',
+  ];
+  final List<CommonListTabItem> tabItems = [
+    CommonListTabItem(text: 'ทั้งหมด', onTap: () {}),
+    CommonListTabItem(text: 'ร่าง', onTap: () {}),
+    CommonListTabItem(text: 'รออนุมัติ', onTap: () {}),
+    CommonListTabItem(text: 'รอตอบกลับ', onTap: () {}),
+    CommonListTabItem(text: 'พ้นกำหนด', onTap: () {}),
+    CommonListTabItem(text: 'ยอมรับแล้ว', onTap: () {}),
+    CommonListTabItem(text: 'ปฏิเสธแล้ว', onTap: () {}),
   ];
 
   QuotationListPage({super.key});
@@ -65,6 +76,67 @@ class QuotationListPage extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 16),
+        CommonListTab(items: tabItems),
+        SizedBox(height: 16),
+        Row(
+          children: [
+            SizedBox(
+              width: 250,
+              child: TextField(
+                decoration: buildCommonInputDecoration(
+                  label: Text('วันที่ออก (เริ่มต้น)'),
+                  isDense: true,
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                readOnly: true,
+                onTap: () {
+                  final DateTime now = DateTime.now();
+                  showDatePicker(
+                    context: context,
+                    firstDate: now,
+                    lastDate: DateTime(now.year + 30),
+                  ).then((value) {});
+                },
+              ),
+            ),
+            SizedBox(width: 16),
+            SizedBox(
+              width: 250,
+              child: TextField(
+                decoration: buildCommonInputDecoration(
+                  label: Text('วันที่ออก (สิ้นสุด)'),
+                  isDense: true,
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                readOnly: true,
+                onTap: () {
+                  final DateTime now = DateTime.now();
+
+                  showDatePicker(
+                    context: context,
+                    firstDate: now,
+                    lastDate: DateTime(now.year + 30),
+                  ).then((value) {});
+                },
+              ),
+            ),
+            Spacer(),
+            SizedBox(
+              width: 250,
+              child: TextField(
+                decoration: buildCommonInputDecoration(
+                  labelText: 'ค้าหาชื่อ, เลขที่',
+                  isDense: true,
+                  suffixIcon: Icon(Icons.search),
+                ),
+              ),
+            ),
+            SizedBox(width: 16),
+            TextButton(onPressed: () {}, child: buildBoldText('ค้นหาขั้นสูง')),
+          ],
+        ),
+        SizedBox(height: 16),
         Expanded(
           child: PaginatedDataTable2(
             showCheckboxColumn: false,

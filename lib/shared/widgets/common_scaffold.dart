@@ -1,6 +1,5 @@
 import 'package:accounting_module/blocs/common_scaffold/bloc.dart';
 import 'package:accounting_module/configs/routes.dart';
-import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/utils/media_query.dart';
@@ -119,51 +118,6 @@ class _MenuState extends State<_Menu> {
   }
 }
 
-class _SliderMenu extends StatelessWidget {
-  Widget _buildProfile(String name, ImageProvider<Object> profileIamge) =>
-      Column(
-        children: [
-          CircleAvatar(radius: 62, backgroundImage: profileIamge),
-          SizedBox(height: 8),
-          Text(
-            name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ],
-      );
-
-  @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Constants.primaryColor1, Constants.primaryColor2],
-        begin: Alignment.topLeft,
-        end: Alignment.topRight,
-      ),
-    ),
-    child: ListView(
-      children: [
-        SizedBox(height: 32),
-        _buildProfile(
-          "อุซูมากิ นารูโตะ",
-          Image.network(
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIKGoqaUJEJixGDrPNtmpFy1iBFyc0xPZirQ&s',
-          ).image,
-        ),
-        Padding(padding: EdgeInsets.all(8), child: Divider()),
-        ...DrawerItemConfig.items.map(
-          (item) => _Menu(
-            drawerKey: item.key,
-            icon: item.icon,
-            title: item.title,
-            menuItems: item.menuItem,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
 class CommonScaffold extends StatefulWidget {
   final Widget child;
 
@@ -176,7 +130,7 @@ class CommonScaffold extends StatefulWidget {
 class _CommonScaffoldState extends State<CommonScaffold> {
   Widget _buildMenuItem(IconData icon, String text) => InkWell(
     onTap: () {
-      Navigator.of(GlobalKeepings.context).pushNamed(RoutePaths.chartOfAccount);
+      Navigator.of(GlobalKeepings.context).pushNamed(RoutePaths.printWebview);
     },
     child: SizedBox(
       width: 170,
