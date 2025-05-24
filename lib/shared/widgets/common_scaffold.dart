@@ -130,7 +130,7 @@ class CommonScaffold extends StatefulWidget {
 class _CommonScaffoldState extends State<CommonScaffold> {
   Widget _buildMenuItem(IconData icon, String text) => InkWell(
     onTap: () {
-      Navigator.of(GlobalKeepings.context).pushNamed(RoutePaths.printWebview);
+      Navigator.of(GlobalKeepings.context).pushNamed(RoutePaths.chartOfAccount);
     },
     child: SizedBox(
       width: 170,
