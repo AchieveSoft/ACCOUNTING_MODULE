@@ -7,12 +7,16 @@ class QuotationInitialState extends QuotationState {}
 class QuotationLoadingState extends QuotationState {}
 
 class QuotationDataState extends QuotationState {
+  final String docCodeGen;
   final List<Quotation> items;
 
-  QuotationDataState({required this.items});
+  QuotationDataState({required this.docCodeGen, required this.items});
 
-  QuotationDataState copyWith({List<Quotation>? items}) =>
-      QuotationDataState(items: items ?? this.items);
+  QuotationDataState copyWith({String? docCodeGen, List<Quotation>? items}) =>
+      QuotationDataState(
+        docCodeGen: docCodeGen ?? this.docCodeGen,
+        items: items ?? this.items,
+      );
 }
 
 class QuotationErrorState extends QuotationState {

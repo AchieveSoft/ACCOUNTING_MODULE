@@ -1,7 +1,9 @@
 import 'package:accounting_module/blocs/purchase_order/bloc.dart';
+import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
+import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/purchase_order.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
@@ -11,11 +13,14 @@ import 'package:accounting_module/utils/media_query.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+enum QuotationManagePageType { create, view }
+
 class QuotationManagePage extends StatelessWidget {
+  final QuotationManagePageType pageType;
   final TextEditingController _duedateTextFieldController =
       TextEditingController();
 
-  QuotationManagePage({super.key});
+  QuotationManagePage({super.key, required this.pageType});
 
   Widget _buildTransactionRow(PurchaseOrderTransaction data, int index) => Row(
     mainAxisSize: MainAxisSize.max,
@@ -207,22 +212,30 @@ class QuotationManagePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 buildHeaderText('รายละเอียด'),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    decoration: buildCommonInputDecoration(
-                                      label: buildNormalRequiredText(
-                                        'เลขที่เอกสาร',
-                                      ),
-                                      isDense: true,
-                                    ),
-                                    controller:
-                                        TextEditingController()
-                                          ..text =
-                                              state.createOrUpdateData?.docNo ??
-                                              '',
-                                    onChanged: (value) {},
-                                  ),
+                                BlocBuilder<QuotationBloc, QuotationState>(
+                                  builder: (context, state) {
+                                    if (state is QuotationDataState) {
+                                      return SizedBox(
+                                        width: 200,
+                                        child: TextField(
+                                          decoration:
+                                              buildCommonInputDecoration(
+                                                label: buildNormalRequiredText(
+                                                  'เลขที่เอกสาร',
+                                                ),
+                                                isDense: true,
+                                              ),
+                                          controller:
+                                              TextEditingController()
+                                                ..text = state.docCodeGen,
+                                          onChanged: (value) {},
+                                          readOnly: true,
+                                        ),
+                                      );
+                                    } else {
+                                      return SizedBox.shrink();
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -607,6 +620,14 @@ class QuotationManagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.readPurchaseOrderBloc().add(PurchaseOrderGetDataEvent());
+
+    if (pageType == QuotationManagePageType.create) {
+      context.readQuotationBloc().add(
+        QuotationInitialCreatePageEvent(
+          currentState: context.readQuotationBloc().getCurrentDataState(),
+        ),
+      );
+    }
 
     return CommonScaffold(child: _buildBody(context));
   }

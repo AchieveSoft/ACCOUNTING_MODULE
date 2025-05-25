@@ -15,7 +15,8 @@ class RoutePaths {
   static String unitMaster = '$baseRoutePath/master/unit';
   static String purchaseOrder = '$baseRoutePath/expense/purchase-order';
   static String quotationList = '$baseRoutePath/revenue/quotation-list';
-  static String quotationManage = '$baseRoutePath/revenue/quotation-manage';
+  static String quotationCreate = '$baseRoutePath/revenue/quotation-create';
+  static String quotationView = '$baseRoutePath/revenue/quotation-view';
   static String printWebview = '$baseRoutePath/print-webview';
 }
 
@@ -26,7 +27,12 @@ class RouteConfifg {
     RoutePaths.unitMaster: (context) => UnitMasterPage(),
     RoutePaths.purchaseOrder: (context) => PurchaseOrderPage(),
     RoutePaths.quotationList: (context) => QuotationListPage(),
-    RoutePaths.quotationManage: (context) => QuotationManagePage(),
+    RoutePaths.quotationCreate:
+        (context) =>
+            QuotationManagePage(pageType: QuotationManagePageType.create),
+    RoutePaths.quotationView:
+        (context) =>
+            QuotationManagePage(pageType: QuotationManagePageType.view),
     RoutePaths.printWebview: (context) => PrintWebview(),
   };
 }
