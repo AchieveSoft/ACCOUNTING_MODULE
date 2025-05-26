@@ -70,6 +70,8 @@ class Quotation {
   String docCode;
   int docStatus;
   String acceptDate;
+  String effectiveDate;
+  String expireDate;
   String? docRef;
   String contractCode;
   double contractCredit;
@@ -77,16 +79,19 @@ class Quotation {
   List<QuotationTransaction> transactions;
   String remark;
   String tagCode;
+  double total;
   String createBy;
   DateTime createDate;
   String updateBy;
   DateTime updateDate;
-  String? attachmentFile;
+  List<String>? attachmentFiles;
 
   Quotation({
     required this.docCode,
     required this.docStatus,
     required this.acceptDate,
+    required this.effectiveDate,
+    required this.expireDate,
     this.docRef,
     required this.contractCode,
     required this.contractCredit,
@@ -94,11 +99,12 @@ class Quotation {
     required this.transactions,
     required this.remark,
     required this.tagCode,
+    required this.total,
     required this.createBy,
     required this.createDate,
     required this.updateBy,
     required this.updateDate,
-    this.attachmentFile,
+    this.attachmentFiles,
   });
 
   factory Quotation.fromJson(Map<String, dynamic> json) {
@@ -106,6 +112,8 @@ class Quotation {
       docCode: json['docCode'],
       docStatus: json['docStatus'],
       acceptDate: json['acceptDate'],
+      effectiveDate: json['effectiveDate'],
+      expireDate: json['expireDate'],
       docRef: json['docRef'],
       contractCode: json['contractCode'],
       contractCredit: json['contractCredit'].toDouble(),
@@ -115,11 +123,12 @@ class Quotation {
           .toList(),
       remark: json['remark'],
       tagCode: json['tagCode'],
+      total: json['total'],
       createBy: json['createBy'],
       createDate: DateTime.parse(json['createDate']),
       updateBy: json['updateBy'],
       updateDate: DateTime.parse(json['updateDate']),
-      attachmentFile: json['attachmentFile'],
+      attachmentFiles: json['attachmentFiles'],
     );
   }
 
@@ -128,6 +137,8 @@ class Quotation {
       'docCode': docCode,
       'docStatus': docStatus,
       'acceptDate': acceptDate,
+      'effectiveDate': effectiveDate,
+      'expireDate': expireDate,
       'docRef': docRef,
       'contractCode': contractCode,
       'contractCredit': contractCredit,
@@ -135,11 +146,11 @@ class Quotation {
       'transactions': transactions.map((transaction) => transaction.toJson()).toList(),
       'remark': remark,
       'tagCode': tagCode,
+      'total': total,
       'createBy': createBy,
       'createDate': createDate.toIso8601String(),
       'updateBy': updateBy,
       'updateDate': updateDate.toIso8601String(),
-      'attachmentFile': attachmentFile,
     };
   }
 }

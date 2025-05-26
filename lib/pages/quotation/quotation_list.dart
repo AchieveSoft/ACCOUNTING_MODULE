@@ -2,6 +2,7 @@ import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/extensions/build_context.dart';
+import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_list_tab.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
@@ -36,8 +37,15 @@ class QuotationListPage extends StatelessWidget {
   void _gotoViewPage(BuildContext context) =>
       Navigator.of(context).pushNamed(RoutePaths.quotationView);
 
-  void _gotoCreatePage(BuildContext context) =>
-      Navigator.of(context).pushNamed(RoutePaths.quotationCreate);
+  void _gotoCreatePage(BuildContext context) {
+    context.readQuotationBloc().add(
+      QuotationInitialCreatePageEvent(
+        currentState: context.readQuotationBloc().getCurrentDataState(),
+      ),
+    );
+    
+    Navigator.of(context).pushNamed(RoutePaths.quotationCreate);
+  }
 
   Widget _buildBody(BuildContext context) =>
       BlocBuilder<QuotationBloc, QuotationState>(
@@ -223,10 +231,10 @@ class QuotationDataTableSource extends DataTableSource {
       cells: [
         DataCell(Text(data.docCode)),
         DataCell(Text('ลูกค้าตัวอย่าง')),
-        DataCell(Text(data.createDate.toString())),
-        DataCell(Text(data.createDate.toString())),
+        DataCell(Text(data.acceptDate.toString())),
+        DataCell(Text(data.acceptDate.toString())),
         DataCell(Text('100,000')),
-        DataCell(Text('รออนุมัติ', style: TextStyle(color: Colors.amber))),
+        DataCell(Text('หมดอายุ', style: TextStyle(color: Colors.redAccent))),
       ],
     );
   }

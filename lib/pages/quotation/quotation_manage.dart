@@ -4,7 +4,7 @@ import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/extensions/quotation_bloc.dart';
-import 'package:accounting_module/models/purchase_order.dart';
+import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
@@ -22,7 +22,7 @@ class QuotationManagePage extends StatelessWidget {
 
   QuotationManagePage({super.key, required this.pageType});
 
-  Widget _buildTransactionRow(PurchaseOrderTransaction data, int index) => Row(
+  Widget _buildTransactionRow(QuotationTransaction data, int index) => Row(
     mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
@@ -121,7 +121,7 @@ class QuotationManagePage extends StatelessWidget {
                     controller:
                         TextEditingController()..text = data.qty.toString(),
                     onChanged: (value) {
-                      data.qty = int.tryParse(value) ?? 0;
+                      data.qty = value;
                     },
                   ),
                 ),
@@ -168,13 +168,13 @@ class QuotationManagePage extends StatelessWidget {
             height: 69,
             child: DeleteIconButton(
               onPressed: () {
-                final currentState =
-                    GlobalKeepings.context.readPurchaseOrderBloc().state
-                        as PurchaseOrderDataState;
-                GlobalKeepings.context.readPurchaseOrderBloc().add(
-                  PurchaseOrderRemoveTransaction(
+                GlobalKeepings.context.readQuotationBloc().add(
+                  QuotationRemoveTransaction(
                     removeIndex: index,
-                    currentState: currentState,
+                    currentState:
+                        GlobalKeepings.context
+                            .readQuotationBloc()
+                            .getCurrentDataState(),
                   ),
                 );
               },
@@ -186,9 +186,9 @@ class QuotationManagePage extends StatelessWidget {
 
   Widget _buildBody(
     BuildContext context,
-  ) => BlocBuilder<PurchaseOrderBloc, PurchaseOrderState>(
+  ) => BlocBuilder<QuotationBloc, QuotationState>(
     builder: (context, state) {
-      if (state is PurchaseOrderDataState) {
+      if (state is QuotationDataState) {
         return Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -307,7 +307,7 @@ class QuotationManagePage extends StatelessWidget {
                                               ..text =
                                                   state
                                                       .createOrUpdateData
-                                                      ?.dueDate ??
+                                                      ?.effectiveDate ??
                                                   '',
                                         readOnly: true,
                                         onTap: () {
@@ -321,12 +321,14 @@ class QuotationManagePage extends StatelessWidget {
                                             if (value == null) {
                                               return;
                                             }
-                                            state.createOrUpdateData!.dueDate =
+                                            state
+                                                    .createOrUpdateData!
+                                                    .effectiveDate =
                                                 value.toString().split(' ')[0];
                                             _duedateTextFieldController.text =
                                                 state
                                                     .createOrUpdateData!
-                                                    .dueDate;
+                                                    .effectiveDate;
                                           });
                                         },
                                       ),
@@ -349,7 +351,7 @@ class QuotationManagePage extends StatelessWidget {
                                               ..text =
                                                   state
                                                       .createOrUpdateData
-                                                      ?.dueDate ??
+                                                      ?.expireDate ??
                                                   '',
                                         readOnly: true,
                                         onTap: () {
@@ -363,12 +365,14 @@ class QuotationManagePage extends StatelessWidget {
                                             if (value == null) {
                                               return;
                                             }
-                                            state.createOrUpdateData!.dueDate =
+                                            state
+                                                    .createOrUpdateData!
+                                                    .expireDate =
                                                 value.toString().split(' ')[0];
                                             _duedateTextFieldController.text =
                                                 state
                                                     .createOrUpdateData!
-                                                    .dueDate;
+                                                    .expireDate;
                                           });
                                         },
                                       ),
@@ -424,8 +428,8 @@ class QuotationManagePage extends StatelessWidget {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    context.readPurchaseOrderBloc().add(
-                                      PurchaseOrderAddTransactionEvent(
+                                    context.readQuotationBloc().add(
+                                      QuotationAddTransactionEvent(
                                         currentState: state,
                                       ),
                                     );
@@ -491,7 +495,7 @@ class QuotationManagePage extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                               buildBoldText(
-                                                '0.00 บาท',
+                                                '${state.totalAmount} บาท',
                                                 color: Colors.white,
                                               ),
                                             ],
@@ -611,6 +615,13 @@ class QuotationManagePage extends StatelessWidget {
             ],
           ),
         );
+      } else if (state is QuotationInitialState) {
+        context.readQuotationBloc().add(
+          QuotationInitialCreatePageEvent(
+            currentState: context.readQuotationBloc().getCurrentDataState(),
+          ),
+        );
+        return SizedBox.shrink();
       } else {
         return SizedBox.shrink();
       }
@@ -619,16 +630,6 @@ class QuotationManagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.readPurchaseOrderBloc().add(PurchaseOrderGetDataEvent());
-
-    if (pageType == QuotationManagePageType.create) {
-      context.readQuotationBloc().add(
-        QuotationInitialCreatePageEvent(
-          currentState: context.readQuotationBloc().getCurrentDataState(),
-        ),
-      );
-    }
-
     return CommonScaffold(child: _buildBody(context));
   }
 }
