@@ -14,13 +14,14 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     on<QuotationInitialCreatePageEvent>(_onInitialCreatePageEvent);
     on<QuotationAddTransactionEvent>(_onAddTransaction);
     on<QuotationRemoveTransaction>(_onRemoveTransaction);
+    on<QuotationViewDetailEvent>(_onViewDetail);
   }
 
-    QuotationTransaction _buildDraftTransaction() => QuotationTransaction(
+  QuotationTransaction _buildDraftTransaction() => QuotationTransaction(
     productOrServiceCode: '',
     currentProductOrServiceName: '',
     currentProductOrServiceNameEn: '',
-    qty: "1",
+    qty: 1,
     currentUnitName: '',
     currentUnitNameEn: '',
     currentUnitPrice: 100,
@@ -98,8 +99,7 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     QuotationAddTransactionEvent event,
     Emitter<QuotationState> emit,
   ) async {
-    final Quotation currentCreateData =
-        event.currentState!.createOrUpdateData!;
+    final Quotation currentCreateData = event.currentState!.createOrUpdateData!;
     currentCreateData.transactions = [
       ...currentCreateData.transactions,
       _buildDraftTransaction(),
@@ -123,5 +123,12 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     createOrUpdateData.transactions = newTransactions;
 
     emit(event.currentState!.copyWith(createOrUpdateData: createOrUpdateData));
+  }
+
+  Future<void> _onViewDetail(
+    QuotationViewDetailEvent event,
+    Emitter<QuotationState> emit,
+  ) async {
+    emit(event.currentState!.copyWith(createOrUpdateData: event.data));
   }
 }

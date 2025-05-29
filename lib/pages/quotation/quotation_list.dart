@@ -34,8 +34,15 @@ class QuotationListPage extends StatelessWidget {
 
   QuotationListPage({super.key});
 
-  void _gotoViewPage(BuildContext context) =>
-      Navigator.of(context).pushNamed(RoutePaths.quotationView);
+  void _gotoViewPage(BuildContext context, Quotation data) {
+    context.readQuotationBloc().add(
+      QuotationViewDetailEvent(
+        data: data,
+        currentState: context.readQuotationBloc().getCurrentDataState(),
+      ),
+    );
+    Navigator.of(context).pushNamed(RoutePaths.quotationView);
+  }
 
   void _gotoCreatePage(BuildContext context) {
     context.readQuotationBloc().add(
@@ -43,7 +50,7 @@ class QuotationListPage extends StatelessWidget {
         currentState: context.readQuotationBloc().getCurrentDataState(),
       ),
     );
-    
+
     Navigator.of(context).pushNamed(RoutePaths.quotationCreate);
   }
 
@@ -191,7 +198,7 @@ class QuotationListPage extends StatelessWidget {
                               .toList(),
                       source: QuotationDataTableSource(
                         items: state.items,
-                        onSelectRow: () => _gotoViewPage(context),
+                        onSelectRow: (data) => _gotoViewPage(context, data),
                       ),
                     ),
                   ),
@@ -214,7 +221,7 @@ class QuotationListPage extends StatelessWidget {
 
 class QuotationDataTableSource extends DataTableSource {
   final List<Quotation> items;
-  final Function onSelectRow;
+  final Function(Quotation) onSelectRow;
 
   QuotationDataTableSource({required this.items, required this.onSelectRow});
 
@@ -225,7 +232,7 @@ class QuotationDataTableSource extends DataTableSource {
     return DataRow(
       onSelectChanged: (selected) {
         if (selected == true) {
-          onSelectRow();
+          onSelectRow(items[index]);
         }
       },
       cells: [

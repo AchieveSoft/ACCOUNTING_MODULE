@@ -15,7 +15,7 @@ class QuotationDataState extends QuotationState {
     double result = 0;
 
     for (QuotationTransaction item in createOrUpdateData?.transactions ?? []) {
-      result += (double.tryParse(item.qty) ?? 0) * item.currentUnitPrice;
+      result += item.qty * item.currentUnitPrice;
     }
 
     return result;

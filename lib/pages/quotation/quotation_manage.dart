@@ -105,7 +105,8 @@ class QuotationManagePage extends StatelessWidget {
                 DataCell(
                   DropdownButtonFormField(
                     decoration: inputDecorationBorderNone,
-                    value: data.productOrServiceCode,
+                    // value: data.productOrServiceCode,
+                    value: '',
                     items: [
                       DropdownMenuItem(
                         value: '',
@@ -121,7 +122,7 @@ class QuotationManagePage extends StatelessWidget {
                     controller:
                         TextEditingController()..text = data.qty.toString(),
                     onChanged: (value) {
-                      data.qty = value;
+                      data.qty = (int.tryParse(value) ?? 0);
                     },
                   ),
                 ),
@@ -227,7 +228,7 @@ class QuotationManagePage extends StatelessWidget {
                                               ),
                                           controller:
                                               TextEditingController()
-                                                ..text = state.docCodeGen,
+                                                ..text = state.createOrUpdateData?.docCode ?? '',
                                           onChanged: (value) {},
                                           readOnly: true,
                                         ),
@@ -265,9 +266,10 @@ class QuotationManagePage extends StatelessWidget {
                                           ),
                                         ),
                                         value:
-                                            state
-                                                .createOrUpdateData
-                                                ?.contractCode ??
+                                            // state
+                                            //     .createOrUpdateData
+                                            //     ?.contractCode ??
+                                            // '',
                                             '',
                                         items: [
                                           DropdownMenuItem(

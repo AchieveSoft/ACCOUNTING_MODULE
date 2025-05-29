@@ -2,7 +2,7 @@ class QuotationTransaction {
   String productOrServiceCode;
   String currentProductOrServiceName;
   String currentProductOrServiceNameEn;
-  String qty;
+  int qty;
   String currentUnitName;
   String currentUnitNameEn;
   double currentUnitPrice;

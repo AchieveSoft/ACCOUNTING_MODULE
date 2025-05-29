@@ -24,3 +24,9 @@ class QuotationRemoveTransaction extends QuotationKeepingCurrentDataStateEventBa
   QuotationRemoveTransaction({required this.removeIndex, required super.currentState});
 }
 
+class QuotationViewDetailEvent extends QuotationKeepingCurrentDataStateEventBase {
+  final Quotation data;
+  
+  QuotationViewDetailEvent({required this.data, required super.currentState});
+}
+
