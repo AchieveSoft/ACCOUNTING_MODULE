@@ -21,9 +21,13 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     on<QuotationViewDetailEvent>(_onViewDetail);
     on<QuotationManualTriggerEvent>(_onManualTrigger);
     on<QuotationCreatOrUpdateEvent>(_onCreateOrUpdate);
+    on<QuotationFilterEvent>(_onFilter);
   }
 
-  Future<void> _onManualTrigger(QuotationManualTriggerEvent event, Emitter<QuotationState> emit) async {
+  Future<void> _onManualTrigger(
+    QuotationManualTriggerEvent event,
+    Emitter<QuotationState> emit,
+  ) async {
     emit(event.currentState!.manualTrigger());
   }
 
@@ -51,7 +55,11 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
 
     CommonLoader.hide();
 
-    final state = QuotationDataState(docCodeGen: '', items: items);
+    final state = QuotationDataState(
+      docCodeGen: '',
+      items: items,
+      tempItems: items,
+    );
     await state.fetchProductAndServiceItems();
     emit(state);
   }
@@ -73,7 +81,6 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     final String value = await DocumentService.generateDocumentCode(
       Constants.documentTypes.quotation,
     );
-
 
     DateTime now = DateTime.now();
     DateTime nextDay = now.add(Duration(days: 1));
@@ -154,13 +161,18 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     emit(event.currentState!.copyWith(createOrUpdateData: event.data));
   }
 
-  Future<void> _onCreateOrUpdate(QuotationCreatOrUpdateEvent event, Emitter<QuotationState> emit) async {
-     emit(QuotationLoadingState());
+  Future<void> _onCreateOrUpdate(
+    QuotationCreatOrUpdateEvent event,
+    Emitter<QuotationState> emit,
+  ) async {
+    emit(QuotationLoadingState());
 
-     event.createOrUpdateData.total = event.currentState!.totalAmount;
+    event.createOrUpdateData.total = event.currentState!.totalAmount;
 
     CommonLoader.show();
-    final BaseResponse<String> response = await QuotationService.create(event.createOrUpdateData);
+    final BaseResponse<String> response = await QuotationService.create(
+      event.createOrUpdateData,
+    );
     CommonLoader.hide();
 
     if (response.success) {
@@ -169,5 +181,58 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     } else {
       Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
     }
+  }
+
+  Future<void> _onFilter(
+    QuotationFilterEvent event,
+    Emitter<QuotationState> emit,
+  ) async {
+    List<Quotation> newItems = event.currentState!.tempItems!;
+
+    if (event.docNo != null && event.docNo != '') {
+      newItems =
+          newItems
+              .where(
+                (item) => item.docCode.toLowerCase().contains(
+                  event.docNo!.toLowerCase(),
+                ),
+              )
+              .toList();
+    }
+
+    if (event.startDate != null) {
+      newItems =
+          newItems.where((item) {
+            DateTime effectiveDate = DateTime.parse(item.effectiveDate);
+
+            return effectiveDate == event.startDate! ||
+                effectiveDate.isAfter(event.startDate!);
+          }).toList();
+    }
+
+    if (event.endDate != null) {
+      newItems =
+          newItems.where((item) {
+            DateTime effectiveDate = DateTime.parse(item.effectiveDate);
+
+            return effectiveDate == event.endDate! ||
+                effectiveDate.isBefore(event.endDate!);
+          }).toList();
+    }
+
+    QuotationFilterStateValue filterValue = QuotationFilterStateValue(
+      docNo: event.docNo,
+      remark: event.remark,
+      startDate: event.startDate,
+      endDate: event.endDate,
+    );
+
+    emit(
+      event.currentState!.copyWith(
+        items: newItems,
+        filterValue:
+            event.currentState!.filterValue?.merge(filterValue) ?? filterValue,
+      ),
+    );
   }
 }

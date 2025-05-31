@@ -28,3 +28,12 @@ mixin ProductAndServiceStateMixin {
     ProductAndServiceStateMixin oldMixin,
   ) => _productAndServiceItems = oldMixin._productAndServiceItems;
 }
+
+// class ContractItemStateMixin {
+//   int? id;
+//   int? index;
+
+//   List<Cont
+
+//   ContractItemStateMixin({required this.id, required this.index});
+// }

@@ -44,8 +44,27 @@ class QuotationManualTriggerEvent
   QuotationManualTriggerEvent({required super.currentState});
 }
 
-class QuotationCreatOrUpdateEvent extends QuotationKeepingCurrentDataStateEventBase {
+class QuotationCreatOrUpdateEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
   final Quotation createOrUpdateData;
 
-  QuotationCreatOrUpdateEvent({required this.createOrUpdateData, required super.currentState});
+  QuotationCreatOrUpdateEvent({
+    required this.createOrUpdateData,
+    required super.currentState,
+  });
+}
+
+class QuotationFilterEvent extends QuotationKeepingCurrentDataStateEventBase {
+  final String? docNo;
+  final String? remark;
+  final DateTime? startDate;
+  final DateTime? endDate;
+
+  QuotationFilterEvent({
+    required super.currentState,
+    this.docNo,
+    this.remark,
+    this.startDate,
+    this.endDate,
+  });
 }
