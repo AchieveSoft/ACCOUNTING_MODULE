@@ -214,7 +214,11 @@ class QuotationListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.readQuotationBloc().add(QuotationGetItemEvent());
+    context.readQuotationBloc().add(
+      QuotationGetItemEvent(
+        currentState: context.readQuotationBloc().getCurrentDataState(),
+      ),
+    );
     return CommonScaffold(child: _buildBody(context));
   }
 }
@@ -238,8 +242,8 @@ class QuotationDataTableSource extends DataTableSource {
       cells: [
         DataCell(Text(data.docCode)),
         DataCell(Text('ลูกค้าตัวอย่าง')),
-        DataCell(Text(data.acceptDate.toString())),
-        DataCell(Text(data.acceptDate.toString())),
+        DataCell(Text(data.effectiveDate)),
+        DataCell(Text(data.expireDate)),
         DataCell(Text('100,000')),
         DataCell(Text('หมดอายุ', style: TextStyle(color: Colors.redAccent))),
       ],

@@ -1,12 +1,14 @@
 part of 'bloc.dart';
 
-abstract class QuotationState {}
+abstract class QuotationState with ProductAndServiceStateMixin {}
 
 class QuotationInitialState extends QuotationState {}
 
 class QuotationLoadingState extends QuotationState {}
 
-class QuotationDataState extends QuotationState {
+class QuotationDataState extends QuotationState with ManualTriggerStateMixin {
+  @override
+  int triggerNum = 0;
   final String docCodeGen;
   final List<Quotation> items;
   Quotation? createOrUpdateData;
@@ -36,8 +38,10 @@ class QuotationDataState extends QuotationState {
       docCodeGen: docCodeGen ?? this.docCodeGen,
       items: items ?? this.items,
       createOrUpdateData: createOrUpdateData ?? this.createOrUpdateData,
-    );
+    )..keepProductAndServiceItemWhenCopy(this);
   }
+
+  QuotationDataState manualTrigger() => copyWith()..callManualTrigger(this);
 }
 
 class QuotationErrorState extends QuotationState {

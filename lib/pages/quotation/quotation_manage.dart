@@ -1,9 +1,11 @@
-import 'package:accounting_module/blocs/purchase_order/bloc.dart';
 import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
+import 'package:accounting_module/extensions/datetime.dart';
+import 'package:accounting_module/extensions/number_extension.dart';
 import 'package:accounting_module/extensions/quotation_bloc.dart';
+import 'package:accounting_module/models/product_and_service_master.dart';
 import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
@@ -17,12 +19,18 @@ enum QuotationManagePageType { create, view }
 
 class QuotationManagePage extends StatelessWidget {
   final QuotationManagePageType pageType;
-  final TextEditingController _duedateTextFieldController =
+  final TextEditingController _effectiveDateTextFieldController =
+      TextEditingController();
+  final TextEditingController _expireDateTextFieldController =
       TextEditingController();
 
   QuotationManagePage({super.key, required this.pageType});
 
-  Widget _buildTransactionRow(QuotationTransaction data, int index) => Row(
+  Widget _buildTransactionRow(
+    QuotationTransaction data,
+    List<ProductsAndServiceMaster> productAndServiceItems,
+    int index,
+  ) => Row(
     mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
@@ -106,13 +114,20 @@ class QuotationManagePage extends StatelessWidget {
                   DropdownButtonFormField(
                     decoration: inputDecorationBorderNone,
                     // value: data.productOrServiceCode,
-                    value: '',
-                    items: [
-                      DropdownMenuItem(
-                        value: '',
-                        child: Text('114102 - สินค้าสำเร็จรูป'),
-                      ),
-                    ],
+                    // value:
+                    //     pageType == QuotationManagePageType.create
+                    //         ? productAndServiceItems[0].productAndServiceCode
+                    //         : data.productOrServiceCode,
+                    value: productAndServiceItems[0].productAndServiceCode,
+                    items:
+                        productAndServiceItems
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item.productAndServiceCode,
+                                child: Text(item.name),
+                              ),
+                            )
+                            .toList(),
                     onChanged: (value) {},
                   ),
                 ),
@@ -121,7 +136,10 @@ class QuotationManagePage extends StatelessWidget {
                     decoration: inputDecorationBorderNone,
                     controller:
                         TextEditingController()..text = data.qty.toString(),
-                    onChanged: (value) {
+                    onSubmitted: (value) {
+                      GlobalKeepings.context
+                          .readQuotationBloc()
+                          .manualTrigger();
                       data.qty = (int.tryParse(value) ?? 0);
                     },
                   ),
@@ -140,8 +158,12 @@ class QuotationManagePage extends StatelessWidget {
                 DataCell(
                   TextField(
                     decoration: inputDecorationBorderNone,
-                    controller: TextEditingController()..text = '0.00',
-                    onChanged: (value) {},
+                    controller:
+                        TextEditingController()
+                          ..text = data.discountTotal.toString(),
+                    onChanged: (value) {
+                      data.discountTotal = double.tryParse(value) ?? 0;
+                    },
                   ),
                 ),
                 DataCell(
@@ -152,7 +174,9 @@ class QuotationManagePage extends StatelessWidget {
                       DropdownMenuItem(value: 1, child: Text('7%')),
                       DropdownMenuItem(value: 2, child: Text('ไม่มี')),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      data.whtType = value ?? 1;
+                    },
                   ),
                 ),
                 DataCell(Text('0.00', overflow: TextOverflow.ellipsis)),
@@ -228,7 +252,11 @@ class QuotationManagePage extends StatelessWidget {
                                               ),
                                           controller:
                                               TextEditingController()
-                                                ..text = state.createOrUpdateData?.docCode ?? '',
+                                                ..text =
+                                                    state
+                                                        .createOrUpdateData
+                                                        ?.docCode ??
+                                                    '',
                                           onChanged: (value) {},
                                           readOnly: true,
                                         ),
@@ -305,7 +333,7 @@ class QuotationManagePage extends StatelessWidget {
                                           ),
                                         ),
                                         controller:
-                                            _duedateTextFieldController
+                                            _effectiveDateTextFieldController
                                               ..text =
                                                   state
                                                       .createOrUpdateData
@@ -326,9 +354,9 @@ class QuotationManagePage extends StatelessWidget {
                                             state
                                                     .createOrUpdateData!
                                                     .effectiveDate =
-                                                value.toString().split(' ')[0];
-                                            _duedateTextFieldController.text =
-                                                state
+                                                value.toYYYYMMDD();
+                                            _effectiveDateTextFieldController
+                                                .text = state
                                                     .createOrUpdateData!
                                                     .effectiveDate;
                                           });
@@ -349,7 +377,7 @@ class QuotationManagePage extends StatelessWidget {
                                           ),
                                         ),
                                         controller:
-                                            _duedateTextFieldController
+                                            _expireDateTextFieldController
                                               ..text =
                                                   state
                                                       .createOrUpdateData
@@ -370,9 +398,9 @@ class QuotationManagePage extends StatelessWidget {
                                             state
                                                     .createOrUpdateData!
                                                     .expireDate =
-                                                value.toString().split(' ')[0];
-                                            _duedateTextFieldController.text =
-                                                state
+                                                value.toYYYYMMDD();
+                                            _expireDateTextFieldController
+                                                .text = state
                                                     .createOrUpdateData!
                                                     .expireDate;
                                           });
@@ -449,8 +477,11 @@ class QuotationManagePage extends StatelessWidget {
                             ),
                             ...state.createOrUpdateData!.transactions.indexed
                                 .map(
-                                  (entry) =>
-                                      _buildTransactionRow(entry.$2, entry.$1),
+                                  (entry) => _buildTransactionRow(
+                                    entry.$2,
+                                    state.productAndServiceItems,
+                                    entry.$1,
+                                  ),
                                 ),
                             SizedBox(height: 16),
                             Divider(),
@@ -497,7 +528,7 @@ class QuotationManagePage extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                               buildBoldText(
-                                                '${state.totalAmount} บาท',
+                                                '${state.totalAmount.toInt().fmt()} บาท',
                                                 color: Colors.white,
                                               ),
                                             ],
@@ -563,17 +594,7 @@ class QuotationManagePage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 16),
                                 ElevatedButton.icon(
-                                  onPressed: () {
-                                    context.readPurchaseOrderBloc().add(
-                                      PurchaseOrderCreateEvent(
-                                        currentState:
-                                            context
-                                                    .readPurchaseOrderBloc()
-                                                    .state
-                                                as PurchaseOrderDataState,
-                                      ),
-                                    );
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blueAccent,
                                   ),
@@ -586,13 +607,17 @@ class QuotationManagePage extends StatelessWidget {
                                 SizedBox(width: 16),
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    context.readPurchaseOrderBloc().add(
-                                      PurchaseOrderCreateEvent(
+                                    context.readQuotationBloc().add(
+                                      QuotationCreatOrUpdateEvent(
+                                        createOrUpdateData:
+                                            context
+                                                .readQuotationBloc()
+                                                .getCurrentDataState()!
+                                                .createOrUpdateData!,
                                         currentState:
                                             context
-                                                    .readPurchaseOrderBloc()
-                                                    .state
-                                                as PurchaseOrderDataState,
+                                                .readQuotationBloc()
+                                                .getCurrentDataState(),
                                       ),
                                     );
                                   },

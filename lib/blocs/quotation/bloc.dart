@@ -1,8 +1,12 @@
+import 'package:accounting_module/blocs/common/state_mixins.dart';
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/extensions/datetime.dart';
 import 'package:accounting_module/models/quotation.dart';
+import 'package:accounting_module/models/responses/base_response.dart';
 import 'package:accounting_module/services/document_service.dart';
 import 'package:accounting_module/services/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_loader.dart';
+import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'event.dart';
@@ -15,6 +19,12 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     on<QuotationAddTransactionEvent>(_onAddTransaction);
     on<QuotationRemoveTransaction>(_onRemoveTransaction);
     on<QuotationViewDetailEvent>(_onViewDetail);
+    on<QuotationManualTriggerEvent>(_onManualTrigger);
+    on<QuotationCreatOrUpdateEvent>(_onCreateOrUpdate);
+  }
+
+  Future<void> _onManualTrigger(QuotationManualTriggerEvent event, Emitter<QuotationState> emit) async {
+    emit(event.currentState!.manualTrigger());
   }
 
   QuotationTransaction _buildDraftTransaction() => QuotationTransaction(
@@ -40,7 +50,10 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     final items = await QuotationService.getItems();
 
     CommonLoader.hide();
-    emit(QuotationDataState(docCodeGen: '', items: items));
+
+    final state = QuotationDataState(docCodeGen: '', items: items);
+    await state.fetchProductAndServiceItems();
+    emit(state);
   }
 
   Future<void> _onGetItems(
@@ -61,12 +74,16 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
       Constants.documentTypes.quotation,
     );
 
+
+    DateTime now = DateTime.now();
+    DateTime nextDay = now.add(Duration(days: 1));
+
     Quotation createData = Quotation(
       docCode: value,
       docStatus: 1,
       acceptDate: '',
-      effectiveDate: '',
-      expireDate: '',
+      effectiveDate: now.toYYYYMMDD(),
+      expireDate: nextDay.toYYYYMMDD(),
       contractCode: '',
       contractCredit: 0,
       taxStatus: 0,
@@ -90,6 +107,10 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
           items: event.currentState?.items ?? [],
           createOrUpdateData: createData,
         );
+
+    if (event.currentState == null) {
+      await state.fetchProductAndServiceItems();
+    }
 
     emit(state);
     CommonLoader.hide();
@@ -129,6 +150,22 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     QuotationViewDetailEvent event,
     Emitter<QuotationState> emit,
   ) async {
+    event.currentState!.fetchProductAndServiceItems();
     emit(event.currentState!.copyWith(createOrUpdateData: event.data));
+  }
+
+  Future<void> _onCreateOrUpdate(QuotationCreatOrUpdateEvent event, Emitter<QuotationState> emit) async {
+     emit(QuotationLoadingState());
+
+    CommonLoader.show();
+    final BaseResponse<String> response = await QuotationService.create(event.createOrUpdateData);
+    CommonLoader.hide();
+
+    if (response.success) {
+      Dialogutil.showAlertDiaglog('ดำเนินการสำเร็จ', 'บันทึกข้อมูลสำเร็จ');
+      emit(event.currentState!);
+    } else {
+      Dialogutil.showAlertDiaglog('ดำเนินการไม่สำเร็จ', response.message);
+    }
   }
 }

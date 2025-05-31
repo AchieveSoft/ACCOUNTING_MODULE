@@ -1,3 +1,5 @@
+import 'package:accounting_module/extensions/datetime.dart';
+
 class QuotationTransaction {
   String productOrServiceCode;
   String currentProductOrServiceName;
@@ -132,6 +134,14 @@ class Quotation {
     );
   }
 
+  String _dateFmt(String value) {
+    if (!value.contains('T') && !value.contains('Z')) {
+      return '${value}T00:00:00+07:00';
+    }
+
+    return value;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'docCode': docCode,
@@ -148,9 +158,9 @@ class Quotation {
       'tagCode': tagCode,
       'total': total,
       'createBy': createBy,
-      'createDate': createDate.toIso8601String(),
+      'createDate': _dateFmt(createDate.toYYYYMMDD()),
       'updateBy': updateBy,
-      'updateDate': updateDate.toIso8601String(),
+      'updateDate': _dateFmt(updateDate.toYYYYMMDD()),
     };
   }
 }

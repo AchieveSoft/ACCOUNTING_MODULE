@@ -2,31 +2,50 @@ part of 'bloc.dart';
 
 abstract class QuotationEvent {}
 
-class QuotationGetItemEvent extends QuotationEvent {}
-
 class QuotationKeepingCurrentDataStateEventBase extends QuotationEvent {
   final QuotationDataState? currentState;
 
   QuotationKeepingCurrentDataStateEventBase({required this.currentState});
 }
 
-class QuotationInitialCreatePageEvent extends QuotationKeepingCurrentDataStateEventBase {
+class QuotationGetItemEvent extends QuotationKeepingCurrentDataStateEventBase {
+  QuotationGetItemEvent({required super.currentState});
+}
+
+class QuotationInitialCreatePageEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
   QuotationInitialCreatePageEvent({required super.currentState});
 }
 
-class QuotationAddTransactionEvent extends QuotationKeepingCurrentDataStateEventBase {
+class QuotationAddTransactionEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
   QuotationAddTransactionEvent({required super.currentState});
 }
 
-class QuotationRemoveTransaction extends QuotationKeepingCurrentDataStateEventBase {
+class QuotationRemoveTransaction
+    extends QuotationKeepingCurrentDataStateEventBase {
   final int removeIndex;
-  
-  QuotationRemoveTransaction({required this.removeIndex, required super.currentState});
+
+  QuotationRemoveTransaction({
+    required this.removeIndex,
+    required super.currentState,
+  });
 }
 
-class QuotationViewDetailEvent extends QuotationKeepingCurrentDataStateEventBase {
+class QuotationViewDetailEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
   final Quotation data;
-  
+
   QuotationViewDetailEvent({required this.data, required super.currentState});
 }
 
+class QuotationManualTriggerEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
+  QuotationManualTriggerEvent({required super.currentState});
+}
+
+class QuotationCreatOrUpdateEvent extends QuotationKeepingCurrentDataStateEventBase {
+  final Quotation createOrUpdateData;
+
+  QuotationCreatOrUpdateEvent({required this.createOrUpdateData, required super.currentState});
+}
