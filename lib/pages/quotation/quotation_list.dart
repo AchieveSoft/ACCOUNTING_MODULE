@@ -2,6 +2,7 @@ import 'package:accounting_module/blocs/quotation/bloc.dart';
 import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/extensions/build_context.dart';
+import 'package:accounting_module/extensions/number_extension.dart';
 import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_list_tab.dart';
@@ -244,7 +245,7 @@ class QuotationDataTableSource extends DataTableSource {
         DataCell(Text('ลูกค้าตัวอย่าง')),
         DataCell(Text(data.effectiveDate)),
         DataCell(Text(data.expireDate)),
-        DataCell(Text('100,000')),
+        DataCell(Text(data.total.toInt().fmt())),
         DataCell(Text('หมดอายุ', style: TextStyle(color: Colors.redAccent))),
       ],
     );

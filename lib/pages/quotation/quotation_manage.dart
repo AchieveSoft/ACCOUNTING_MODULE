@@ -160,9 +160,10 @@ class QuotationManagePage extends StatelessWidget {
                     decoration: inputDecorationBorderNone,
                     controller:
                         TextEditingController()
-                          ..text = data.discountTotal.toString(),
-                    onChanged: (value) {
+                          ..text = data.discountTotal.toInt().fmt(),
+                    onSubmitted: (value) {
                       data.discountTotal = double.tryParse(value) ?? 0;
+                      GlobalKeepings.context.readQuotationBloc().manualTrigger();
                     },
                   ),
                 ),
@@ -508,7 +509,7 @@ class QuotationManagePage extends StatelessWidget {
                                         textAlign: TextAlign.end,
                                         controller:
                                             TextEditingController()
-                                              ..text = '0.00',
+                                              ..text = state.totalDiscountPrice.toInt().fmt(),
                                       ),
                                     ),
                                     SizedBox(width: 36),

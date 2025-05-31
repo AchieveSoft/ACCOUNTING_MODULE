@@ -157,6 +157,8 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
   Future<void> _onCreateOrUpdate(QuotationCreatOrUpdateEvent event, Emitter<QuotationState> emit) async {
      emit(QuotationLoadingState());
 
+     event.createOrUpdateData.total = event.currentState!.totalAmount;
+
     CommonLoader.show();
     final BaseResponse<String> response = await QuotationService.create(event.createOrUpdateData);
     CommonLoader.hide();
