@@ -41,7 +41,7 @@ class QuotationDataState extends QuotationState with ManualTriggerStateMixin {
     double result = 0;
 
     for (QuotationTransaction item in createOrUpdateData?.transactions ?? []) {
-      result += item.qty * item.currentUnitPrice;
+      result += item.currentUnitPrice * item.qty;
     }
 
     return result - totalDiscountPrice;
@@ -51,7 +51,7 @@ class QuotationDataState extends QuotationState with ManualTriggerStateMixin {
     double result = 0;
 
     for (QuotationTransaction item in createOrUpdateData?.transactions ?? []) {
-      result += item.discountTotal;
+      result += item.discountTotal * item.qty;
     }
 
     return result;
