@@ -663,7 +663,7 @@ class QuotationManagePage extends StatelessWidget {
 
   void _onPop(BuildContext context) {
     context.readQuotationBloc().add(
-      QuotationInitialCreatePageEvent(
+      QuotationGetItemEvent(
         currentState: context.readQuotationBloc().getCurrentDataState(),
       ),
     );
