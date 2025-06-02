@@ -60,6 +60,8 @@ class QuotationListPage extends StatelessWidget {
   }
 
   void _genTabTotalItems(List<Quotation> items) {
+    tabTotalItems.clear();
+
     List<int> totalValueList = [
       items.length,
       items.where((item) => item.docStatus.isDocumentDraftStatus()).length,
