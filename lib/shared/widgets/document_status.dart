@@ -6,7 +6,7 @@ class DocumentStatus extends StatelessWidget {
   final Map<DocumentStatusType, Color> _colorMapping = {
     DocumentStatusType.unknown: Colors.grey,
     DocumentStatusType.draft: Colors.grey,
-    DocumentStatusType.waitInternelApprove: Colors.blueAccent,
+    DocumentStatusType.waitInternalApprove: Colors.blueAccent,
     DocumentStatusType.internalApprove: Colors.greenAccent,
     DocumentStatusType.internalReject: Colors.redAccent,
     DocumentStatusType.waitCustomerAccept: Colors.purpleAccent,
@@ -17,7 +17,7 @@ class DocumentStatus extends StatelessWidget {
   final Map<DocumentStatusType, String> _messageMapping = {
     DocumentStatusType.unknown: 'ไม่รู้สถานะ',
     DocumentStatusType.draft: 'ร่าง',
-    DocumentStatusType.waitInternelApprove: 'รออนุมัติ',
+    DocumentStatusType.waitInternalApprove: 'รออนุมัติ',
     DocumentStatusType.internalApprove: 'อนุมัติแล้ว',
     DocumentStatusType.internalReject: 'ปฏิเสธแล้ว',
     DocumentStatusType.waitCustomerAccept: 'รอตอบกลับ',

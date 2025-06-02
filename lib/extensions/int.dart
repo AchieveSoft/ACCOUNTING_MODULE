@@ -1,4 +1,5 @@
-import 'package:accounting_module/shared/document_status_type.dart' show DocumentStatusType;
+import 'package:accounting_module/shared/document_status_type.dart'
+    show DocumentStatusType;
 
 extension IntExtension on int {
   DocumentStatusType toDocumentStatus() {
@@ -6,23 +7,41 @@ extension IntExtension on int {
       case 1:
         return DocumentStatusType.draft;
       case 2:
-        return DocumentStatusType.waitInternelApprove;
+        return DocumentStatusType.waitInternalApprove;
       case 3:
-        return DocumentStatusType.waitInternelApprove;
-      case 4:
         return DocumentStatusType.internalApprove;
-      case 5:
+      case 4:
         return DocumentStatusType.internalReject;
-      case 6:
+      case 5:
         return DocumentStatusType.waitCustomerAccept;
-      case 7:
+      case 6:
         return DocumentStatusType.customerAccept;
-      case 8:
+      case 7:
         return DocumentStatusType.customerReject;
-      case 9:
+      case 8:
         return DocumentStatusType.temporaryRemove;
+      case 9:
+        return DocumentStatusType.expire;
       default:
         return DocumentStatusType.unknown;
     }
   }
+
+  bool isDocumentDraftStatus() => this == 1;
+
+  bool isDocumentWaitInternalApproveStatus() => this == 2;
+
+  bool isDocumentInternalApproveStatus() => this == 3;
+
+  bool isDocumentInternalRejectStatus() => this == 4;
+
+  bool isDocumentWaitCustomerAcceptStatus() => this == 5;
+
+  bool isDocumentCustomerAcceptStatus() => this == 6;
+
+  bool isDocumentCustomerRejectStatus() => this == 7;
+
+  bool isDocumentCustomerTemporaryRemoveStatus() => this == 8;
+
+  bool isDocumentExpireStatus() => this == 9;
 }

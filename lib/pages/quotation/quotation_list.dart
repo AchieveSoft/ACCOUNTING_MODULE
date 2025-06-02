@@ -26,6 +26,7 @@ class QuotationListPage extends StatelessWidget {
     'มูลค่าสุทธิ',
     'สถานะ',
   ];
+  final List<CommonListTotalItem> tabTotalItems = [];
   final List<CommonListTabItem> tabItems = [
     CommonListTabItem(text: 'ทั้งหมด', onTap: () {}),
     CommonListTabItem(text: 'ร่าง', onTap: () {}),
@@ -45,8 +46,7 @@ class QuotationListPage extends StatelessWidget {
         currentState: context.readQuotationBloc().getCurrentDataState(),
       ),
     );
-    Navigator.of(context).pushNamed(RoutePaths.quotationView)
-      .then((result) => print('sss'));
+    Navigator.of(context).pushNamed(RoutePaths.quotationView);
   }
 
   void _gotoCreatePage(BuildContext context) {
@@ -59,11 +59,53 @@ class QuotationListPage extends StatelessWidget {
     Navigator.of(context).pushNamed(RoutePaths.quotationCreate);
   }
 
+  void _genTabTotalItems(List<Quotation> items) {
+    List<int> totalValueList = [
+      items.length,
+      items.where((item) => item.docStatus.isDocumentDraftStatus()).length,
+      items
+          .where((item) => item.docStatus.isDocumentWaitInternalApproveStatus())
+          .length,
+      items
+          .where((item) => item.docStatus.isDocumentWaitCustomerAcceptStatus())
+          .length,
+      items.where((item) => item.docStatus.isDocumentExpireStatus()).length,
+      items
+          .where((item) => item.docStatus.isDocumentCustomerAcceptStatus())
+          .length,
+      items
+          .where((item) => item.docStatus.isDocumentCustomerRejectStatus())
+          .length,
+    ];
+    List<Color> totalColorList = [
+      Constants.primaryColor1,
+      Colors.grey,
+      Colors.blueAccent,
+      Colors.blueAccent,
+      Colors.redAccent,
+      Colors.greenAccent,
+      Colors.redAccent,
+    ];
+
+    int loopLength = totalValueList.length - 1;
+
+    for (int index = 0; index <= loopLength; index++) {
+      tabTotalItems.add(
+        CommonListTotalItem(
+          value: totalValueList[index],
+          color: totalColorList[index],
+        ),
+      );
+    }
+  }
+
   Widget _buildBody(
     BuildContext context,
   ) => BlocBuilder<QuotationBloc, QuotationState>(
     builder: (context, state) {
       if (state is QuotationDataState) {
+        _genTabTotalItems(state.items);
+
         return Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -107,7 +149,7 @@ class QuotationListPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16),
-              CommonListTab(items: tabItems),
+              CommonListTab(items: tabItems, totalItems: tabTotalItems),
               SizedBox(height: 16),
               Row(
                 children: [

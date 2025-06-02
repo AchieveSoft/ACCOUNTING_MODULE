@@ -163,7 +163,9 @@ class QuotationManagePage extends StatelessWidget {
                           ..text = data.discountTotal.toInt().fmt(),
                     onSubmitted: (value) {
                       data.discountTotal = double.tryParse(value) ?? 0;
-                      GlobalKeepings.context.readQuotationBloc().manualTrigger();
+                      GlobalKeepings.context
+                          .readQuotationBloc()
+                          .manualTrigger();
                     },
                   ),
                 ),
@@ -509,7 +511,10 @@ class QuotationManagePage extends StatelessWidget {
                                         textAlign: TextAlign.end,
                                         controller:
                                             TextEditingController()
-                                              ..text = state.totalDiscountPrice.toInt().fmt(),
+                                              ..text =
+                                                  state.totalDiscountPrice
+                                                      .toInt()
+                                                      .fmt(),
                                       ),
                                     ),
                                     SizedBox(width: 36),
@@ -656,8 +661,21 @@ class QuotationManagePage extends StatelessWidget {
     },
   );
 
+  void _onPop(BuildContext context) {
+    context.readQuotationBloc().add(
+      QuotationInitialCreatePageEvent(
+        currentState: context.readQuotationBloc().getCurrentDataState(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CommonScaffold(child: _buildBody(context));
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        _onPop(context);
+      },
+      child: CommonScaffold(child: _buildBody(context)),
+    );
   }
 }

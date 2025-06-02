@@ -1,4 +1,5 @@
 import 'package:accounting_module/constants.dart';
+import 'package:accounting_module/extensions/list.dart';
 import 'package:flutter/material.dart';
 
 class CommonListTabItem {
@@ -8,10 +9,18 @@ class CommonListTabItem {
   CommonListTabItem({required this.text, required this.onTap});
 }
 
+class CommonListTotalItem {
+  final int value;
+  final Color color;
+
+  CommonListTotalItem({required this.value, required this.color});
+}
+
 class CommonListTab extends StatefulWidget {
   final List<CommonListTabItem> items;
+  final List<CommonListTotalItem>? totalItems;
 
-  const CommonListTab({super.key, required this.items});
+  const CommonListTab({super.key, required this.items, this.totalItems});
 
   @override
   State<CommonListTab> createState() => _CommonListTabState();
@@ -30,6 +39,30 @@ class _CommonListTabState extends State<CommonListTab> {
       borderRadius: BorderRadius.circular(8),
     ),
   );
+
+  Widget _buildTotalItem(int index) {
+    CommonListTotalItem totalItem = widget.totalItems![index];
+
+    return Padding(
+      padding: EdgeInsets.only(left: 8),
+      child: SizedBox(
+        width: 30,
+        height: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: totalItem.color,
+          ),
+          child: Center(
+            child: Text(
+              totalItem.value.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildTabItem(CommonListTabItem item, int index) => Padding(
     padding: EdgeInsets.only(left: index == 0 ? 0 : 8),
@@ -69,9 +102,13 @@ class _CommonListTabState extends State<CommonListTab> {
   Widget build(BuildContext context) {
     List<Widget> items = [];
 
-    widget.items.asMap().forEach(
-      (index, item) => items.add(_buildTabItem(item, index)),
-    );
+    widget.items.asMap().forEach((index, item) {
+      items.add(_buildTabItem(item, index));
+
+      if (widget.totalItems?.existsIndex(index) == true) {
+        items.add(_buildTotalItem(index));
+      }
+    });
 
     return Container(
       width: double.infinity,

@@ -1,7 +1,7 @@
 enum DocumentStatusType {
   unknown,
   draft,
-  waitInternelApprove,
+  waitInternalApprove,
   internalApprove,
   internalReject,
   waitCustomerAccept,
