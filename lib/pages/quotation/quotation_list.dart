@@ -3,11 +3,13 @@ import 'package:accounting_module/configs/routes.dart';
 import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/extensions/datetime.dart';
+import 'package:accounting_module/extensions/int.dart';
 import 'package:accounting_module/extensions/number_extension.dart';
 import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_list_tab.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
+import 'package:accounting_module/shared/widgets/document_status.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/shared/widgets/texts.dart';
 import 'package:accounting_module/utils/media_query.dart';
@@ -43,7 +45,8 @@ class QuotationListPage extends StatelessWidget {
         currentState: context.readQuotationBloc().getCurrentDataState(),
       ),
     );
-    Navigator.of(context).pushNamed(RoutePaths.quotationView);
+    Navigator.of(context).pushNamed(RoutePaths.quotationView)
+      .then((result) => print('sss'));
   }
 
   void _gotoCreatePage(BuildContext context) {
@@ -159,8 +162,7 @@ class QuotationListPage extends StatelessWidget {
                       controller:
                           TextEditingController()
                             ..text =
-                                state.filterValue?.endDate?.toYYYYMMDD() ??
-                                '',
+                                state.filterValue?.endDate?.toYYYYMMDD() ?? '',
                       onTap: () {
                         final DateTime now = DateTime.now();
 
@@ -297,7 +299,7 @@ class QuotationDataTableSource extends DataTableSource {
         DataCell(Text(data.effectiveDate)),
         DataCell(Text(data.expireDate)),
         DataCell(Text(data.total.toInt().fmt())),
-        DataCell(Text('หมดอายุ', style: TextStyle(color: Colors.redAccent))),
+        DataCell(DocumentStatus(status: data.docStatus.toDocumentStatus())),
       ],
     );
   }
