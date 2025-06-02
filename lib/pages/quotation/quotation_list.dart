@@ -39,6 +39,12 @@ class QuotationListPage extends StatelessWidget {
 
   QuotationListPage({super.key});
 
+  void _fetchData(BuildContext context) => context.readQuotationBloc().add(
+    QuotationGetItemEvent(
+      currentState: context.readQuotationBloc().getCurrentDataState(),
+    ),
+  );
+
   void _gotoViewPage(BuildContext context, Quotation data) {
     context.readQuotationBloc().add(
       QuotationViewDetailEvent(
@@ -55,7 +61,6 @@ class QuotationListPage extends StatelessWidget {
         currentState: context.readQuotationBloc().getCurrentDataState(),
       ),
     );
-
     Navigator.of(context).pushNamed(RoutePaths.quotationCreate);
   }
 
@@ -312,11 +317,7 @@ class QuotationListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.readQuotationBloc().add(
-      QuotationGetItemEvent(
-        currentState: context.readQuotationBloc().getCurrentDataState(),
-      ),
-    );
+    _fetchData(context);
     return CommonScaffold(child: _buildBody(context));
   }
 }
