@@ -12,6 +12,11 @@ class QuotationGetItemEvent extends QuotationKeepingCurrentDataStateEventBase {
   QuotationGetItemEvent({required super.currentState});
 }
 
+class QuotationInitialListPageEvent
+    extends QuotationKeepingCurrentDataStateEventBase {
+  QuotationInitialListPageEvent({required super.currentState});
+}
+
 class QuotationInitialCreatePageEvent
     extends QuotationKeepingCurrentDataStateEventBase {
   QuotationInitialCreatePageEvent({required super.currentState});

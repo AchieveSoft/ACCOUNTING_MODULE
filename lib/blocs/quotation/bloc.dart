@@ -55,13 +55,28 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
 
     CommonLoader.hide();
 
+    final DateTime now = DateTime.now();
+    final DateTime next7Days = now.add(Duration(days: 7));
+    final QuotationFilterStateValue initialFilterCriteria =
+        QuotationFilterStateValue(startDate: now, endDate: next7Days);
     final state = QuotationDataState(
       docCodeGen: '',
       items: items,
       tempItems: items,
+      filterValue: initialFilterCriteria,
     );
+
     await state.fetchProductAndServiceItems();
     emit(state);
+
+    _onFilter(
+      QuotationFilterEvent(
+        currentState: state,
+        startDate: now,
+        endDate: next7Days,
+      ),
+      emit,
+    );
   }
 
   Future<void> _onGetItems(
@@ -187,51 +202,57 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     QuotationFilterEvent event,
     Emitter<QuotationState> emit,
   ) async {
-    List<Quotation> newItems = event.currentState!.tempItems!;
-
-    if (event.docNo != null && event.docNo != '') {
-      newItems =
-          newItems
-              .where(
-                (item) => item.docCode.toLowerCase().contains(
-                  event.docNo!.toLowerCase(),
-                ),
-              )
-              .toList();
-    }
-
-    if (event.startDate != null) {
-      newItems =
-          newItems.where((item) {
-            DateTime effectiveDate = DateTime.parse(item.effectiveDate);
-
-            return effectiveDate == event.startDate! ||
-                effectiveDate.isAfter(event.startDate!);
-          }).toList();
-    }
-
-    if (event.endDate != null) {
-      newItems =
-          newItems.where((item) {
-            DateTime effectiveDate = DateTime.parse(item.effectiveDate);
-
-            return effectiveDate == event.endDate! ||
-                effectiveDate.isBefore(event.endDate!);
-          }).toList();
-    }
-
-    QuotationFilterStateValue filterValue = QuotationFilterStateValue(
+    QuotationFilterStateValue filterCriteria = QuotationFilterStateValue(
       docNo: event.docNo,
       remark: event.remark,
       startDate: event.startDate,
       endDate: event.endDate,
     );
 
+    if (event.currentState?.filterValue != null) {
+      filterCriteria = event.currentState!.filterValue!.merge(filterCriteria);
+    }
+
+    List<Quotation> newItems = event.currentState!.tempItems!;
+
+    if (filterCriteria.docNo?.isNotEmpty == true) {
+      newItems =
+          newItems
+              .where(
+                (item) => item.docCode.toLowerCase().contains(
+                  filterCriteria.docNo!.toLowerCase(),
+                ),
+              )
+              .toList();
+    }
+
+    if (filterCriteria.startDate != null) {
+      newItems =
+          newItems.where((item) {
+            final DateTime effectiveDate =
+                DateTime.parse(item.effectiveDate).toDateOnly();
+            final DateTime startDate = filterCriteria.startDate!.toDateOnly();
+
+            return effectiveDate == startDate ||
+                effectiveDate.isAfter(startDate);
+          }).toList();
+    }
+
+    if (filterCriteria.endDate != null) {
+      newItems =
+          newItems.where((item) {
+            final DateTime expireDate =
+                DateTime.parse(item.expireDate).toDateOnly();
+            final DateTime endDate = filterCriteria.endDate!.toDateOnly();
+
+            return expireDate == endDate || expireDate.isBefore(endDate);
+          }).toList();
+    }
+
     emit(
       event.currentState!.copyWith(
         items: newItems,
-        filterValue:
-            event.currentState!.filterValue?.merge(filterValue) ?? filterValue,
+        filterValue: filterCriteria,
       ),
     );
   }
