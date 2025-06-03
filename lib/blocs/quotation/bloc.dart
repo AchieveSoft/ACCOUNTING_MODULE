@@ -6,6 +6,7 @@ import 'package:accounting_module/models/responses/base_response.dart';
 import 'package:accounting_module/services/document_service.dart';
 import 'package:accounting_module/services/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_loader.dart';
+import 'package:accounting_module/utils/date_util.dart';
 import 'package:accounting_module/utils/dialog_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,10 +56,10 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
 
     CommonLoader.hide();
 
-    final DateTime now = DateTime.now();
-    final DateTime next7Days = now.add(Duration(days: 7));
+    final DateTime monday = DateUtil.getMondayOfWeek(DateTime.now());
+    final DateTime next7Days = monday.add(Duration(days: 7));
     final QuotationFilterStateValue initialFilterCriteria =
-        QuotationFilterStateValue(startDate: now, endDate: next7Days);
+        QuotationFilterStateValue(startDate: monday, endDate: next7Days);
     final state = QuotationDataState(
       docCodeGen: '',
       items: items,
@@ -72,7 +73,7 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     _onFilter(
       QuotationFilterEvent(
         currentState: state,
-        startDate: now,
+        startDate: monday,
         endDate: next7Days,
       ),
       emit,

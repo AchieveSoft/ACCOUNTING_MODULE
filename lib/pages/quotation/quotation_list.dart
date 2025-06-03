@@ -178,7 +178,7 @@ class QuotationListPage extends StatelessWidget {
                         final DateTime now = DateTime.now();
                         showDatePicker(
                           context: context,
-                          firstDate: now,
+                          firstDate: DateTime(now.year - 3),
                           lastDate: DateTime(now.year + 30),
                         ).then((value) {
                           if (value != null) {
