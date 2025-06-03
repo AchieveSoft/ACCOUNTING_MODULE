@@ -17,7 +17,14 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class QuotationListPage extends StatelessWidget {
+class QuotationListPage extends StatefulWidget {
+  const QuotationListPage({super.key});
+
+  @override
+  State<QuotationListPage> createState() => _QuotationListPageState();
+}
+
+class _QuotationListPageState extends State<QuotationListPage> {
   final List<String> _tableCols = [
     'เลขที่เอกสาร',
     'ลูกค้า',
@@ -37,7 +44,11 @@ class QuotationListPage extends StatelessWidget {
     CommonListTabItem(text: 'ปฏิเสธแล้ว', onTap: () {}),
   ];
 
-  QuotationListPage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _fetchData(context);
+  }
 
   void _fetchData(BuildContext context) => context.readQuotationBloc().add(
     QuotationGetItemEvent(
@@ -317,7 +328,6 @@ class QuotationListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _fetchData(context);
     return CommonScaffold(child: _buildBody(context));
   }
 }
