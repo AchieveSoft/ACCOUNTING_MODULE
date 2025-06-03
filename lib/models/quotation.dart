@@ -125,7 +125,7 @@ class Quotation {
           .toList(),
       remark: json['remark'],
       tagCode: json['tagCode'],
-      total: json['total'],
+      total: json['total'].toDouble(),
       createBy: json['createBy'],
       createDate: DateTime.parse(json['createDate']),
       updateBy: json['updateBy'],
