@@ -8,6 +8,7 @@ import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/product_and_service_master.dart';
 import 'package:accounting_module/models/quotation.dart';
 import 'package:accounting_module/shared/widgets/common_scaffold.dart';
+import 'package:accounting_module/shared/widgets/common_stepper.dart';
 import 'package:accounting_module/shared/widgets/icon_buttons.dart';
 import 'package:accounting_module/shared/widgets/input_decoration.dart';
 import 'package:accounting_module/shared/widgets/texts.dart';
@@ -17,12 +18,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum QuotationManagePageType { create, view }
 
+// ignore: must_be_immutable
 class QuotationManagePage extends StatelessWidget {
   final QuotationManagePageType pageType;
   final TextEditingController _effectiveDateTextFieldController =
       TextEditingController();
   final TextEditingController _expireDateTextFieldController =
       TextEditingController();
+
+  List<CommonStepperItem> mockSteps = [
+    CommonStepperItem(text: 'ใบเสนอราคา', key: 'approve'),
+    CommonStepperItem(text: 'รอตอบกลับ', key: 'accept'),
+    CommonStepperItem(text: 'ใบแจ้งหนี้', key: 'invoice'),
+    CommonStepperItem(text: 'รับชำระ', key: 'payment'),
+    CommonStepperItem(text: 'ใบเสร็จรับเงิน', key: 'receipt'),
+    CommonStepperItem(text: 'ออกใบกำกับภาษี', key: 'tax'),
+  ];
 
   QuotationManagePage({super.key, required this.pageType});
 
@@ -222,6 +233,10 @@ class QuotationManagePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: EdgeInsets.only(left: 48, right: 48, bottom: 16),
+                child: CommonStepper(steps: mockSteps),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [buildPageHeaderText('สร้างใบเสนอราคา')],
