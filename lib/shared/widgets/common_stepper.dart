@@ -5,8 +5,14 @@ class CommonStepperItem {
   final String text;
   final String key;
   final Function? onTap;
+  final IconData? icon;
 
-  CommonStepperItem({required this.text, required this.key, this.onTap});
+  CommonStepperItem({
+    required this.text,
+    required this.key,
+    this.onTap,
+    this.icon,
+  });
 }
 
 // ignore: must_be_immutable
@@ -44,11 +50,15 @@ class _CommonStepperState extends State<CommonStepper> {
     return Colors.grey;
   }
 
-  IconData _getItemIcon({bool? isCurrentStep, bool? isNextStep}) {
+  IconData _getItemIcon({
+    bool? isCurrentStep,
+    bool? isNextStep,
+    IconData? defaultIcon,
+  }) {
     if (isCurrentStep == true) {
       return Icons.check;
     } else if (isNextStep == true) {
-      return Icons.circle_outlined;
+      return defaultIcon ?? Icons.circle_outlined;
     }
 
     return Icons.circle_outlined;
@@ -83,6 +93,7 @@ class _CommonStepperState extends State<CommonStepper> {
               _getItemIcon(
                 isCurrentStep: isCurrentStep,
                 isNextStep: isNextStep,
+                defaultIcon: data.icon,
               ),
               color: _getFontColor(
                 isCurrentStep: isCurrentStep,

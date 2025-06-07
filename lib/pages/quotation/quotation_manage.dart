@@ -26,13 +26,13 @@ class QuotationManagePage extends StatelessWidget {
   final TextEditingController _expireDateTextFieldController =
       TextEditingController();
 
-  List<CommonStepperItem> mockSteps = [
+  List<CommonStepperItem> stepItems = [
     CommonStepperItem(text: 'ใบเสนอราคา', key: 'approve'),
-    CommonStepperItem(text: 'รอตอบกลับ', key: 'accept'),
-    CommonStepperItem(text: 'ใบแจ้งหนี้', key: 'invoice'),
-    CommonStepperItem(text: 'รับชำระ', key: 'payment'),
-    CommonStepperItem(text: 'ใบเสร็จรับเงิน', key: 'receipt'),
-    CommonStepperItem(text: 'ออกใบกำกับภาษี', key: 'tax'),
+    CommonStepperItem(text: 'รอตอบกลับ', key: 'accept', icon: Icons.add),
+    CommonStepperItem(text: 'ใบแจ้งหนี้', key: 'invoice', icon: Icons.add),
+    CommonStepperItem(text: 'รับชำระ', key: 'payment', icon: Icons.add),
+    CommonStepperItem(text: 'ใบเสร็จรับเงิน', key: 'receipt', icon: Icons.add),
+    CommonStepperItem(text: 'ออกใบกำกับภาษี', key: 'tax', icon: Icons.add),
   ];
 
   QuotationManagePage({super.key, required this.pageType});
@@ -233,13 +233,29 @@ class QuotationManagePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 48, right: 48, bottom: 16),
-                child: CommonStepper(steps: mockSteps),
-              ),
+              pageType == QuotationManagePageType.view
+                  ? Padding(
+                    padding: EdgeInsets.only(
+                      left: 48,
+                      right: 48,
+                      top: 32,
+                      bottom: 32,
+                    ),
+                    child: CommonStepper(
+                      steps: stepItems,
+                      currentStepKey: 'approve',
+                    ),
+                  )
+                  : SizedBox.shrink(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [buildPageHeaderText('สร้างใบเสนอราคา')],
+                children: [
+                  buildPageHeaderText(
+                    pageType == QuotationManagePageType.create
+                        ? 'สร้างใบเสนอราคา'
+                        : 'ใบเสนอราคา',
+                  ),
+                ],
               ),
               Expanded(
                 child: SizedBox(
