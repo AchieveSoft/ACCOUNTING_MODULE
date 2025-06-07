@@ -32,8 +32,8 @@ class _CommonStepperState extends State<CommonStepper> {
   Widget _buildStepItemLine() =>
       Expanded(child: Container(height: 3, color: Constants.primaryColor2));
 
-  Color _getItemColor({bool? isCurrentStep, bool? isNextStep}) {
-    if (isCurrentStep == true) {
+  Color _getItemColor({bool? isAccept, bool? isNextStep}) {
+    if (isAccept == true) {
       return Constants.primaryColor1;
     } else if (isNextStep == true) {
       return Colors.blueAccent;
@@ -42,8 +42,8 @@ class _CommonStepperState extends State<CommonStepper> {
     return Colors.white;
   }
 
-  Color _getFontColor({bool? isCurrentStep, bool? isNextStep}) {
-    if (isCurrentStep == true || isNextStep == true) {
+  Color _getFontColor({bool? isAccept, bool? isNextStep}) {
+    if (isAccept == true || isNextStep == true) {
       return Colors.white;
     }
 
@@ -51,11 +51,11 @@ class _CommonStepperState extends State<CommonStepper> {
   }
 
   IconData _getItemIcon({
-    bool? isCurrentStep,
+    bool? isAccept,
     bool? isNextStep,
     IconData? defaultIcon,
   }) {
-    if (isCurrentStep == true) {
+    if (isAccept == true) {
       return Icons.check;
     } else if (isNextStep == true) {
       return defaultIcon ?? Icons.circle_outlined;
@@ -65,12 +65,12 @@ class _CommonStepperState extends State<CommonStepper> {
   }
 
   Widget _buildStepItem(CommonStepperItem data, int itemIndex) {
-    bool isCurrentStep = itemIndex == widget.currentStepIndex;
+    bool isAccept = widget.currentStepIndex >= itemIndex;
     bool isNextStep = (itemIndex - widget.currentStepIndex) == 1;
 
     return InkWell(
       onTap:
-          isCurrentStep
+          isAccept
               ? null
               : () {
                 data.onTap?.call();
@@ -79,10 +79,7 @@ class _CommonStepperState extends State<CommonStepper> {
         width: 150,
         height: 70,
         decoration: BoxDecoration(
-          color: _getItemColor(
-            isCurrentStep: isCurrentStep,
-            isNextStep: isNextStep,
-          ),
+          color: _getItemColor(isAccept: isAccept, isNextStep: isNextStep),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Constants.primaryColor1),
         ),
@@ -91,21 +88,18 @@ class _CommonStepperState extends State<CommonStepper> {
           children: [
             Icon(
               _getItemIcon(
-                isCurrentStep: isCurrentStep,
+                isAccept: isAccept,
                 isNextStep: isNextStep,
                 defaultIcon: data.icon,
               ),
-              color: _getFontColor(
-                isCurrentStep: isCurrentStep,
-                isNextStep: isNextStep,
-              ),
+              color: _getFontColor(isAccept: isAccept, isNextStep: isNextStep),
             ),
             SizedBox(width: 8),
             Text(
               data.text,
               style: TextStyle(
                 color: _getFontColor(
-                  isCurrentStep: isCurrentStep,
+                  isAccept: isAccept,
                   isNextStep: isNextStep,
                 ),
               ),

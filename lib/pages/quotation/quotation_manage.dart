@@ -28,7 +28,7 @@ class QuotationManagePage extends StatelessWidget {
 
   List<CommonStepperItem> stepItems = [
     CommonStepperItem(text: 'ใบเสนอราคา', key: 'approve'),
-    CommonStepperItem(text: 'รอตอบกลับ', key: 'accept', icon: Icons.add),
+    CommonStepperItem(text: 'ตอบรับแล้ว', key: 'accept', icon: Icons.add),
     CommonStepperItem(text: 'ใบแจ้งหนี้', key: 'invoice', icon: Icons.add),
     CommonStepperItem(text: 'รับชำระ', key: 'payment', icon: Icons.add),
     CommonStepperItem(text: 'ใบเสร็จรับเงิน', key: 'receipt', icon: Icons.add),
@@ -243,7 +243,7 @@ class QuotationManagePage extends StatelessWidget {
                     ),
                     child: CommonStepper(
                       steps: stepItems,
-                      currentStepKey: 'approve',
+                      currentStepKey: 'accept',
                     ),
                   )
                   : SizedBox.shrink(),
