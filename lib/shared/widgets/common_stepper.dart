@@ -16,7 +16,6 @@ class CommonStepper extends StatefulWidget {
 
   CommonStepper({super.key, required this.steps, String? currentStepKey}) {
     currentStepIndex = steps.indexWhere((item) => item.key == currentStepKey);
-    print(currentStepIndex);
   }
 
   @override
