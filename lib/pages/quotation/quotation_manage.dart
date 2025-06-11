@@ -3,6 +3,7 @@ import 'package:accounting_module/constants.dart';
 import 'package:accounting_module/core/global_keepings.dart';
 import 'package:accounting_module/extensions/build_context.dart';
 import 'package:accounting_module/extensions/datetime.dart';
+import 'package:accounting_module/extensions/int.dart';
 import 'package:accounting_module/extensions/number_extension.dart';
 import 'package:accounting_module/extensions/quotation_bloc.dart';
 import 'package:accounting_module/models/product_and_service_master.dart';
@@ -36,6 +37,16 @@ class QuotationManagePage extends StatelessWidget {
   ];
 
   QuotationManagePage({super.key, required this.pageType});
+
+  String _mapDocumentStatusToCurrentStepKey(int docStatus) {
+    if (docStatus.isDocumentInternalApproveStatus()) {
+      return 'approve';
+    } else if (docStatus.isDocumentCustomerAcceptStatus()) {
+      return 'accept';
+    }
+
+    return '';
+  }
 
   Widget _buildTransactionRow(
     QuotationTransaction data,
@@ -243,7 +254,9 @@ class QuotationManagePage extends StatelessWidget {
                     ),
                     child: CommonStepper(
                       steps: stepItems,
-                      currentStepKey: 'accept',
+                      currentStepKey: _mapDocumentStatusToCurrentStepKey(
+                        state.createOrUpdateData?.docStatus ?? 0,
+                      ),
                     ),
                   )
                   : SizedBox.shrink(),
@@ -651,6 +664,7 @@ class QuotationManagePage extends StatelessWidget {
                                                 .readQuotationBloc()
                                                 .getCurrentDataState()!
                                                 .createOrUpdateData!,
+                                        isUpdate: pageType == QuotationManagePageType.view,
                                         currentState:
                                             context
                                                 .readQuotationBloc()

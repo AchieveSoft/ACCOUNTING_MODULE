@@ -52,9 +52,11 @@ class QuotationManualTriggerEvent
 class QuotationCreatOrUpdateEvent
     extends QuotationKeepingCurrentDataStateEventBase {
   final Quotation createOrUpdateData;
+  final bool isUpdate;
 
   QuotationCreatOrUpdateEvent({
     required this.createOrUpdateData,
+    this.isUpdate = false,
     required super.currentState,
   });
 }

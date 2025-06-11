@@ -34,4 +34,17 @@ class QuotationService {
       rethrow;
     }
   }
+
+   static Future<BaseResponse<String>> update(Quotation data) async {
+    try {
+      final Map<String, dynamic> response = await _http.postFormData(
+        '$_baseApiPath/update-quotation',
+        DataAndFileRequest(data: data.toJson()).toJson(),
+      );
+
+      return BaseResponse.fromJson(response);
+    } catch (err) {
+      rethrow;
+    }
+  }
 }
