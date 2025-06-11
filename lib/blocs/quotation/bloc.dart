@@ -186,9 +186,10 @@ class QuotationBloc extends Bloc<QuotationEvent, QuotationState> {
     event.createOrUpdateData.total = event.currentState!.totalAmount;
 
     CommonLoader.show();
-    final BaseResponse<String> response = await QuotationService.create(
-      event.createOrUpdateData,
-    );
+    final BaseResponse<String> response =
+        event.isUpdate
+            ? await QuotationService.update(event.createOrUpdateData)
+            : await QuotationService.create(event.createOrUpdateData);
     CommonLoader.hide();
 
     if (response.success) {
