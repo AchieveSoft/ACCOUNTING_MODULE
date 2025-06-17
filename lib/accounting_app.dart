@@ -12,6 +12,6 @@ class AccountingApp extends StatelessWidget {
     navigatorKey: GlobalKeepings.navigator,
     [AccountingModule()],
     'Solution Leader - Accounting',
-    RoutePaths.quotationList,
+    RoutePaths.poc,
   );
 }

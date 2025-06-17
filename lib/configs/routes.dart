@@ -1,5 +1,6 @@
 import 'package:accounting_module/pages/chart_of_account/chart_of_account.dart';
 import 'package:accounting_module/pages/master/unit/unit_master.dart';
+import 'package:accounting_module/pages/poc/poc.dart';
 import 'package:accounting_module/pages/print/print_webview.dart';
 import 'package:accounting_module/pages/purchase_order/purchase_order.dart';
 import 'package:accounting_module/pages/quotation/quotation_manage.dart';
@@ -18,6 +19,7 @@ class RoutePaths {
   static String quotationCreate = '$baseRoutePath/revenue/quotation-create';
   static String quotationView = '$baseRoutePath/revenue/quotation-view';
   static String printWebview = '$baseRoutePath/print-webview';
+  static String poc = '$baseRoutePath/poc';
 }
 
 class RouteConfifg {
@@ -34,5 +36,6 @@ class RouteConfifg {
         (context) =>
             QuotationManagePage(pageType: QuotationManagePageType.view),
     RoutePaths.printWebview: (context) => PrintWebview(),
+    RoutePaths.poc: (context) => PocPage(),
   };
 }
