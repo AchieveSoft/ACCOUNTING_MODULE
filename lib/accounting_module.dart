@@ -1,4 +1,6 @@
 import 'package:accounting_module/blocs/blocs.dart';
+import 'package:accounting_module/configs/languages/en.dart';
+import 'package:accounting_module/configs/languages/th.dart';
 import 'package:flutter/material.dart';
 import 'package:nested/nested.dart' show SingleChildWidget;
 import 'package:accounting_module/configs/routes.dart';
@@ -19,5 +21,5 @@ class AccountingModule extends BaseModule {
   @override
   List<SingleChildWidget> blocs = AllBlocs.items;
   @override
-  List<LanguageConfig> languageConfigs = [];
+  List<LanguageConfig> languageConfigs = [enLanguageConfig, thLanguageConfig];
 }
