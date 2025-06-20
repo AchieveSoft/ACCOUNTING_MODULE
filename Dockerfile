@@ -11,4 +11,12 @@ RUN git config --global --add safe.directory /root/development/flutter
 
 ENV PATH="/root/development/flutter/bin:${PATH}"
 
-CMD ["/bin/bash"]
+WORKDIR /app/
+
+COPY . /app/
+
+RUN cd ACCOUNTING_MODULE
+RUN flutter pub get
+RUN flutter build web --wasm
+
+CMD ["/bin/bash", "--login"]
