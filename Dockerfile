@@ -15,7 +15,6 @@ WORKDIR /app/
 
 COPY . /app/
 
-RUN cd ACCOUNTING_MODULE
 RUN flutter pub get
 RUN flutter build web --wasm
 
