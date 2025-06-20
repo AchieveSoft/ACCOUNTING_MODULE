@@ -11,4 +11,4 @@ RUN git config --global --add safe.directory /root/development/flutter
 
 ENV PATH="/root/development/flutter/bin:${PATH}"
 
-CMD ["flutter"]
+CMD ["/bin/bash"]
