@@ -17,7 +17,12 @@ COPY . /app/
 
 RUN git clone $(echo $(git remote get-url origin) | sed 's/ACCOUNTING_MODULE/ERP_FLUTTER_CORE_MODULE/g') ../erp_flutter_core_module
 
-RUN flutter pub get
-RUN flutter build web --wasm
+RUN flutter pub get && \
+    flutter build web --wasm
 
-ENTRYPOINT ["/bin/sh"]
+RUN rm -rf /var/www/html/* && \
+    cp -f build/web/* /var/www/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
