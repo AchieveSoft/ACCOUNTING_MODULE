@@ -21,7 +21,7 @@ RUN flutter pub get && \
     flutter build web --wasm
 
 RUN rm -rf /var/www/html/* && \
-    cp -f build/web/* /var/www/html/
+    cp -a build/web/. /var/www/html/
 
 EXPOSE 80
 
