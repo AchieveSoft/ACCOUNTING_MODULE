@@ -15,7 +15,7 @@ WORKDIR /app/
 
 COPY . /app/
 
-RUN git clone $(echo $(git remote get-url origin) | sed 's/ACCOUNTING_MODULE/ERP_FLUTTER_CORE_MODULE/g') ../ERP_FLUTTER_CORE_MODULE
+RUN git clone $(echo $(git remote get-url origin) | sed 's/ACCOUNTING_MODULE/ERP_FLUTTER_CORE_MODULE/g') ../erp_flutter_core_module
 
 RUN flutter pub get
 RUN flutter build web --wasm
