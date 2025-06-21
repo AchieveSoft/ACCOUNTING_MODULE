@@ -20,4 +20,4 @@ COPY . /app/
 # RUN flutter pub get
 # RUN flutter build web --wasm
 
-CMD ["/bin/sh"]
+ENTRYPOINT ["/bin/sh"]
