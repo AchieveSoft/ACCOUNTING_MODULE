@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+ssh -o StrictHostKeyChecking=no -i /root/data/ssh_key root@119.59.124.97 'rm -rf ACCOUNTING_MODULE && git clone https://oauth2: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@github.com/AchieveSoft/ACCOUNTING_MODULE.git && cd ACCOUNTING_MODULE && chmod +x scripts/* && ./scripts/build-and-run-docker-container dev 3000'

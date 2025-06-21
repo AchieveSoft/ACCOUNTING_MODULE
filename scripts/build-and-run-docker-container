@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+env=$1
+port=$2
+
+if [ -z "$env" ]; then
+    env="dev"
+fi
+
+if [ -z "$port" ]; then
+    port=3000
+fi
+
+image_name="accounting-web-$env"
+old_container_id=$(docker ps -q --filter ancestor=$image_name)
+
+if [ -n "$old_container_id" ]; then
+    docker stop $old_container_id
+    docker rm $old_container_id
+if
+
+docker build -t $image_name .
+docker run -d -p $port:80  

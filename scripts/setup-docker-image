@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+
+apt-get update -y && apt-get upgrade -y
+apt-get install -y curl git unzip xz-utils zip libglu1-mesa wget nginx
+wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz
+mkdir /root/development/
+tar -xf flutter_linux_3.32.4-stable.tar.xz -C /root/development/
+git config --global --add safe.directory /root/development/flutter
+export PATH="/root/development/flutter/bin:${PATH}"
+
+git clone $(echo $(git remote get-url origin) | sed 's/ACCOUNTING_MODULE/ERP_FLUTTER_CORE_MODULE/g') ../erp_flutter_core_module
+
+flutter pub get
+flutter build web --wasm
+
+rm -rf /var/www/html/*
+cp -a build/web/. /var/www/html/
